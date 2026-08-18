@@ -1,6 +1,7 @@
 ---
 import Tag from './Tag.astro';
 import { marked } from 'marked';
+import { withBase } from '../lib/paths.js';
 
 interface Author {
   name: string;
@@ -67,7 +68,7 @@ function linkIcon(name: string): string | null {
   <div class="card-grid">
     <!-- Text: md=12/24, lg=16/24 -->
     <div class="card-text">
-      <h5><a href={href}>{title}</a></h5>
+      <h5><a href={withBase(href)}>{title}</a></h5>
 
       {authors.length > 0 && (
         <div class="authors-row">
@@ -80,7 +81,7 @@ function linkIcon(name: string): string | null {
                   <span class="authors-ellipsis" role="button" tabindex="0" title="Show all authors">&hellip;,&nbsp;</span>
                 )}
                 <span class:list={['author', { 'author-hidden': isHidden }]}>{author.url ? (
-                    <a href={author.url} target="_blank" rel="noopener noreferrer" set:html={inlineMd(author.name)} />
+                    <a href={withBase(author.url)} target="_blank" rel="noopener noreferrer" set:html={inlineMd(author.name)} />
                   ) : (
                     <span set:html={inlineMd(author.name)} />
                   )}{i < authors.length - 1 ? <Fragment>,&nbsp;</Fragment> : null}</span>
@@ -107,7 +108,7 @@ function linkIcon(name: string): string | null {
                 <Tag
                   name={tag}
                   color={tagColors[i % tagColors.length]}
-                  href={tagHrefBase ? `${tagHrefBase}?tag=${encodeURIComponent(tag)}` : undefined}
+                  href={tagHrefBase ? withBase(`${tagHrefBase}?tag=${encodeURIComponent(tag)}`) : undefined}
                 />
               ))}
             </div>
@@ -127,7 +128,7 @@ function linkIcon(name: string): string | null {
                 const icon = linkIcon(link.name);
                 return (
                   <a
-                    href={link.url}
+                    href={withBase(link.url)}
                     target={link.url.startsWith('http') ? '_blank' : undefined}
                     rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
                     class="btn-ghost"
@@ -146,7 +147,7 @@ function linkIcon(name: string): string | null {
     <!-- Image: md=12/24, lg=8/24 -->
     <div class="card-image-col">
       {cover ? (
-        <img src={cover} alt={title} class="card-image" />
+        <img src={withBase(cover)} alt={title} class="card-image" />
       ) : (
         <div class="card-image-placeholder"></div>
       )}

@@ -4,6 +4,7 @@ import Tag from 'astro-academic-theme/components/Tag.astro';
 import { siteConfig } from '@/config';
 import { getCollection, render } from 'astro:content';
 import { marked } from 'marked';
+import { withBase } from 'astro-academic-theme/lib/paths';
 
 export async function getStaticPaths() {
   const research = await getCollection('research');
@@ -210,7 +211,7 @@ function linkIcon(name: string): string | null {
         <Tag
           name={tag}
           color={siteConfig.tagColors[i % siteConfig.tagColors.length]}
-          href={`/research?tag=${encodeURIComponent(tag)}`}
+          href={withBase(`/research?tag=${encodeURIComponent(tag)}`)}
         />
       ))}
     </div>

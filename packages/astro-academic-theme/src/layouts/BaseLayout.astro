@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import type { SiteConfig } from '../types.js';
 import { getNavItems, isNavActive } from '../lib/nav.js';
+import { withBase } from '../lib/paths.js';
 
 interface Props {
   config: SiteConfig;
@@ -83,7 +84,7 @@ const isMainTabPage = mainPaths.includes(currentPath);
       <div class:list={['page-body', { 'has-rail': !showUserInfo }]}>
         <main class="main-col">
           {!isMainTabPage && activeNavItem && (
-            <a href={activeNavItem.href} class="back-link">
+            <a href={withBase(activeNavItem.href)} class="back-link">
               <i class="fas fa-arrow-left"></i> {activeNavItem.label}
             </a>
           )}

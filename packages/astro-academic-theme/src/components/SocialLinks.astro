@@ -1,5 +1,6 @@
 ---
 import type { SocialLink } from '../types.js';
+import { withBase } from '../lib/paths.js';
 
 interface Props {
   links: SocialLink[];
@@ -23,7 +24,7 @@ function getIconClass(icon: string | [string, string]): string {
 <div class="social-links">
   {links.map((link) => (
     <a
-      href={link.url}
+      href={withBase(link.url)}
       target={link.url.startsWith('/') || link.url.startsWith('mailto:') ? undefined : '_blank'}
       rel={link.url.startsWith('/') || link.url.startsWith('mailto:') ? undefined : 'noopener noreferrer'}
       class="social-icon-btn"

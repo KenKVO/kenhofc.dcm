@@ -18,7 +18,7 @@ A **virtual imaging trial (VIT)** changes the experiment. Instead of asking some
 The useful idea is not *synthetic images*. It is **controlled counterfactuals**.
 
 <figure class="figure-block figure-hero">
-  <img src="/posts/DukeSim-VIT/fig1_vit_pipeline.svg" alt="Virtual imaging trial pipeline from virtual patient through DukeSim, reconstruction, reader, and endpoint." />
+  <img src={`${import.meta.env.BASE_URL}posts/DukeSim-VIT/fig1_vit_pipeline.svg`} alt="Virtual imaging trial pipeline from virtual patient through DukeSim, reconstruction, reader, and endpoint." />
   <figcaption><strong>Figure 1.</strong> A VIT is a chain of models. The trial is defined by what you hold still, what you vary, and what you measure at the end.</figcaption>
 </figure>
 
@@ -98,7 +98,7 @@ DukeSim is a GPU CT simulator that makes scanner-specific projections and recons
 DukeSim v1.2 takes a voxelized phantom and material file, acquisition geometry, spectrum and bowtie information, detector response, and a protocol file. It can output sinograms, reconstructed images, and dose estimates. The current release covers energy-integrating and photon-counting detectors, and it ships with an FBP reconstruction tool.[2]
 
 <figure class="figure-block">
-  <img src="/posts/DukeSim-VIT/fig2_dukesim_forward_model.svg" alt="DukeSim forward model showing phantom, primary ray tracing, Monte Carlo scatter, detector physics, sinogram, reconstruction, and dose." />
+  <img src={`${import.meta.env.BASE_URL}posts/DukeSim-VIT/fig2_dukesim_forward_model.svg`} alt="DukeSim forward model showing phantom, primary ray tracing, Monte Carlo scatter, detector physics, sinogram, reconstruction, and dose." />
   <figcaption><strong>Figure 2.</strong> A simplified DukeSim forward model. The scanner is not one function. It is a sequence of physical and computational steps.</figcaption>
 </figure>
 
@@ -135,7 +135,7 @@ $$
 Only the protocol changes.
 
 <figure class="figure-block">
-  <img src="/posts/DukeSim-VIT/fig3_counterfactual_pairs.svg" alt="The same virtual patient is imaged under three protocols, producing paired counterfactual measurements." />
+  <img src={`${import.meta.env.BASE_URL}posts/DukeSim-VIT/fig3_counterfactual_pairs.svg`} alt="The same virtual patient is imaged under three protocols, producing paired counterfactual measurements." />
   <figcaption><strong>Figure 3.</strong> Counterfactual pairing. The same virtual anatomy goes through more than one imaging condition, so protocol differences are not mixed up with anatomical differences.</figcaption>
 </figure>
 
@@ -166,7 +166,7 @@ Imagine a graduate project testing three acquisition choices:
 That is already a $3\times3\times3=27$-condition factorial design *per virtual patient*.
 
 <figure class="figure-block">
-  <img src="/posts/DukeSim-VIT/fig4_factorial_design.svg" alt="Factorial virtual imaging trial design varying dose, slice thickness, and reconstruction kernel across the same virtual cohort." />
+  <img src={`${import.meta.env.BASE_URL}posts/DukeSim-VIT/fig4_factorial_design.svg`} alt="Factorial virtual imaging trial design varying dose, slice thickness, and reconstruction kernel across the same virtual cohort." />
   <figcaption><strong>Figure 4.</strong> A factorial VIT. The experimental factors make a parameter space. Anatomy and repeated noise realizations give you the population and the randomness.</figcaption>
 </figure>
 

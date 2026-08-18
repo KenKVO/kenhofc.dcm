@@ -5,6 +5,7 @@ import { siteConfig } from '@/config';
 import { getCollection, render } from 'astro:content';
 import { marked } from 'marked';
 import { entities } from '@/lib/entities';
+import { withBase } from 'astro-academic-theme/lib/paths';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts');
@@ -163,7 +164,7 @@ for (const e of entities) {
         <Tag
           name={tag}
           color={siteConfig.tagColors[i % siteConfig.tagColors.length]}
-          href={`/posts?tag=${encodeURIComponent(tag)}`}
+          href={withBase(`/posts?tag=${encodeURIComponent(tag)}`)}
         />
       ))}
     </div>

@@ -1,6 +1,7 @@
 ---
 import Tag from './Tag.astro';
 import { marked } from 'marked';
+import { withBase } from '../lib/paths.js';
 
 interface Props {
   title: string;
@@ -24,23 +25,23 @@ const formattedDate = date.toLocaleDateString('en-US', {
 <!-- RSuite Panel bordered, padding 0, height 100% -->
 <div class="post-card">
   <div class="card-image-wrap">
-    <a href={href}>
+    <a href={withBase(href)}>
       {cover ? (
-        <img src={cover} alt={title} class="card-image" />
+        <img src={withBase(cover)} alt={title} class="card-image" />
       ) : (
         <div class="card-image-placeholder"></div>
       )}
     </a>
   </div>
   <div class="card-body">
-    <h5><a href={href}>{title}</a></h5>
+    <h5><a href={withBase(href)}>{title}</a></h5>
     <div class="tags-row">
       {tags.map((tag, i) => (
         <Tag name={tag} color={tagColors[i % tagColors.length]} />
       ))}
     </div>
     {excerpt && (
-      <a href={href} class="excerpt-link">
+      <a href={withBase(href)} class="excerpt-link">
         <p class="excerpt"><Fragment set:html={marked.parseInline(excerpt)} /></p>
       </a>
     )}

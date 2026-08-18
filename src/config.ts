@@ -3,7 +3,7 @@ import type { SiteConfig } from 'astro-academic-theme';
 export const siteConfig: SiteConfig = {
   title: 'Ken Ho',
   description: "Fong Chi (Ken) Ho's academic website.",
-  siteUrl: 'https://kenkvo.github.io/kenho',
+  siteUrl: 'https://kenkvo.github.io/kenhofc.dcm',
   author: 'Fong Chi Ho',
   authorAlternative: '',
   avatar: 'avatar.png',

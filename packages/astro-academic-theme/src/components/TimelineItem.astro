@@ -1,4 +1,6 @@
 ---
+import { withBase } from '../lib/paths.js';
+
 interface Props {
   title: string;
   subtitle?: string;
@@ -20,11 +22,11 @@ const { title, subtitle, minor, date, icon = 'school', iconColor = '#44566C', lo
   <div class:list={['timeline-icon', { 'timeline-icon-logo': !!logo }]}>
     {logo && logoDark ? (
       <>
-        <img src={logo} alt="" class="timeline-logo timeline-logo-light" />
-        <img src={logoDark} alt="" class="timeline-logo timeline-logo-dark" />
+        <img src={withBase(logo)} alt="" class="timeline-logo timeline-logo-light" />
+        <img src={withBase(logoDark)} alt="" class="timeline-logo timeline-logo-dark" />
       </>
     ) : logo ? (
-      <img src={logo} alt="" class="timeline-logo" />
+      <img src={withBase(logo)} alt="" class="timeline-logo" />
     ) : (
       <i class={`fas fa-${icon}`} style={`color: ${iconColor}`}></i>
     )}

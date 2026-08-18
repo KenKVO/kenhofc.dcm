@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '@/layouts/Layout.astro';
 import { siteConfig } from '@/config';
+import { withBase } from 'astro-academic-theme/lib/paths';
 ---
 
 <BaseLayout config={siteConfig} title="404 - Page Not Found">
@@ -11,7 +12,7 @@ import { siteConfig } from '@/config';
       The page you are looking for isn't available. Try to search again or use the go back button below.
     </p>
     <a
-      href="/"
+      href={withBase('/')}
       class="inline-flex items-center gap-2 px-6 py-2 bg-primary text-white rounded-full font-medium hover:opacity-90 transition-opacity"
     >
       <i class="fas fa-arrow-left"></i>

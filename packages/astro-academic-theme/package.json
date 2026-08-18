@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
+    "./lib/paths": "./src/lib/paths.ts",
     "./components/*": "./src/components/*",
     "./layouts/*": "./src/layouts/*",
     "./styles/global.css": "./src/styles/global.css"

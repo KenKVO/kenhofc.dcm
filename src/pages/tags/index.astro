@@ -2,6 +2,7 @@
 import BaseLayout from '@/layouts/Layout.astro';
 import { siteConfig } from '@/config';
 import { getCollection } from 'astro:content';
+import { withBase } from 'astro-academic-theme/lib/paths';
 
 const allPosts = await getCollection('posts');
 const allResearch = await getCollection('research');
@@ -25,7 +26,7 @@ const sortedTags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1]);
       const colorName = siteConfig.tagColors[i % siteConfig.tagColors.length];
       return (
         <a
-          href={`/tags/${tag.toLowerCase()}/`}
+          href={withBase(`/tags/${tag.toLowerCase()}/`)}
           class="block border border-[var(--color-border)] rounded-[var(--radius-base)] p-5 text-center hover:border-primary transition-colors"
         >
           <h4 class="text-lg font-semibold mb-1">#{tag}</h4>

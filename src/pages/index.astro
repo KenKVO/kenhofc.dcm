@@ -6,6 +6,7 @@ import { siteConfig } from '@/config';
 import { renderMarkdown } from '@/lib/markdown';
 import { highlightEntities } from '@/lib/entities';
 import { getCollection } from 'astro:content';
+import { withBase } from 'astro-academic-theme/lib/paths';
 
 // Get selected research
 const allResearch = await getCollection('research');
@@ -64,7 +65,7 @@ const miscHtml = siteConfig.misc ? renderMarkdown(siteConfig.misc) : '';
 
 <BaseLayout config={siteConfig} currentPath="/">
   <section class="home-hero">
-    <img src={`/${siteConfig.avatar}`} alt={siteConfig.author} class="hero-photo" />
+    <img src={withBase(siteConfig.avatar)} alt={siteConfig.author} class="hero-photo" />
     <div class="hero-copy">
       <p class="hero-roles">{siteConfig.professions.join(' · ')}</p>
       {siteConfig.quote && <p class="hero-quote">{siteConfig.quote}</p>}

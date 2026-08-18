@@ -1,5 +1,6 @@
 ---
 import type { SiteConfig } from '../types.js';
+import { withBase } from '../lib/paths.js';
 import SocialLinks from './SocialLinks.astro';
 
 interface Props {
@@ -20,7 +21,7 @@ const lastName = nameParts[nameParts.length - 1];
   <aside class="sidebar-inner">
     <!-- Avatar: 180px, border-radius 3rem, margin auto -->
     <img
-      src={`/${config.avatar}`}
+      src={withBase(config.avatar)}
       alt={config.author}
       class="profile-avatar"
     />
