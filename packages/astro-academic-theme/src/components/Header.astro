@@ -1,0 +1,196 @@
+---
+import type { SiteConfig } from '../types.js';
+import { getNavItems, isNavActive } from '../lib/nav.js';
+import SocialLinks from './SocialLinks.astro';
+
+interface Props {
+  config: SiteConfig;
+  currentPath?: string;
+}
+
+const { config, currentPath = '/' } = Astro.props;
+const navItems = getNavItems(config);
+---
+
+<header class="masthead">
+  <a href="/" class="brand">
+    <img src={`/${config.avatar}`} alt="" class="brand-photo" />
+    <span class="brand-copy">
+      <span class="brand-name">{config.title}</span>
+      <span class="brand-sub">{config.author}</span>
+    </span>
+  </a>
+
+  <nav class="mast-nav" aria-label="Primary">
+    {navItems.map((item) => {
+      const active = isNavActive(currentPath, item.href, item.exact);
+      return (
+        <a
+          href={item.href}
+          class:list={['mast-link', { 'is-active': active }]}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </nav>
+
+  <div class="mast-tools">
+    <div class="mast-social">
+      <SocialLinks links={config.social} />
+    </div>
+    <button id="theme-toggle" class="theme-btn" aria-label="Toggle theme">
+      <i class="fas fa-sun" id="theme-icon-sun"></i>
+      <i class="fas fa-moon" id="theme-icon-moon" style="display:none"></i>
+    </button>
+  </div>
+</header>
+
+<style>
+  .masthead {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.1rem 0 1rem;
+    border-bottom: 2px solid var(--color-primary);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--color-bg);
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+    color: inherit;
+    min-width: 0;
+  }
+
+  .brand-photo {
+    width: 44px;
+    height: 44px;
+    object-fit: cover;
+    border-radius: 2px;
+    flex-shrink: 0;
+  }
+
+  .brand-copy {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .brand-name {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: var(--color-primary);
+  }
+
+  .brand-sub {
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .mast-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.15rem 1.35rem;
+    margin-left: auto;
+  }
+
+  .mast-link {
+    font-size: 0.92rem;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    padding: 0.2rem 0;
+    border-bottom: 2px solid transparent;
+  }
+
+  .mast-link:hover,
+  .mast-link.is-active {
+    color: var(--color-primary);
+    border-bottom-color: var(--color-primary);
+  }
+
+  .mast-tools {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-shrink: 0;
+  }
+
+  .mast-social :global(.social-icon-btn) {
+    width: 1.85rem;
+    height: 1.85rem;
+    font-size: 0.95rem;
+    border-radius: 2px;
+  }
+
+  .theme-btn {
+    border: 1px solid var(--color-border);
+    background: transparent;
+    color: var(--color-text);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 860px) {
+    .masthead {
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .mast-nav {
+      order: 3;
+      width: 100%;
+      margin-left: 0;
+      padding-top: 0.35rem;
+    }
+
+    .brand-sub {
+      display: none;
+    }
+
+    .mast-social {
+      display: none;
+    }
+  }
+</style>
+
+<script>
+  function initHeader() {
+    const toggle = document.getElementById('theme-toggle');
+
+    function updateIcons() {
+      const isDark = document.documentElement.classList.contains('dark');
+      document.querySelectorAll('[id$="theme-icon-sun"]').forEach(el => (el as HTMLElement).style.display = isDark ? 'none' : '');
+      document.querySelectorAll('[id$="theme-icon-moon"]').forEach(el => (el as HTMLElement).style.display = isDark ? '' : 'none');
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle('dark');
+      localStorage.setItem('theme',
+        document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+      updateIcons();
+    }
+
+    toggle?.addEventListener('click', toggleTheme);
+    updateIcons();
+  }
+
+  initHeader();
+  document.addEventListener('astro:after-swap', initHeader);
+</script>

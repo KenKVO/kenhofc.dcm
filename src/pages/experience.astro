@@ -1,0 +1,420 @@
+---
+import BaseLayout from '@/layouts/Layout.astro';
+import Timeline from 'astro-academic-theme/components/Timeline.astro';
+import TimelineItem from 'astro-academic-theme/components/TimelineItem.astro';
+import { siteConfig } from '@/config';
+import { getEntity } from '@/lib/entities';
+
+const { education, researchExperience, teachingExperience, talks, service, awards } = siteConfig;
+---
+
+<BaseLayout config={siteConfig} title="Experience" currentPath="/experience/">
+  <!-- Education -->
+  <section class="exp-section">
+    <h2 class="section-heading">Education</h2>
+    <Timeline showLine={true}>
+      {education.map((edu) => (
+        <TimelineItem
+          title={edu.title}
+          minor={edu.minor}
+          subtitle={edu.location}
+          date={edu.date}
+          icon={edu.icon || 'university'}
+          logo={getEntity(edu.location)?.logo}
+          logoDark={getEntity(edu.location)?.logoDark}
+          entityColor={getEntity(edu.location)?.color}
+          entityColorDark={getEntity(edu.location)?.colorDark}
+        />
+      ))}
+    </Timeline>
+  </section>
+
+  <!-- Research & Industry Experience -->
+  {researchExperience && researchExperience.length > 0 && (
+    <section class="exp-section">
+      <h2 class="section-heading">Research &amp; Industry Experience</h2>
+      <Timeline showLine={true}>
+        {researchExperience.map((item) => (
+          <TimelineItem
+            title={item.role}
+            subtitle={item.organization}
+            date={item.date}
+            icon={item.icon || 'briefcase'}
+            logo={getEntity(item.organization)?.logo}
+            logoDark={getEntity(item.organization)?.logoDark}
+            entityColor={getEntity(item.organization)?.color}
+            entityColorDark={getEntity(item.organization)?.colorDark}
+          >
+            <div class="tl-desc" set:html={item.description} />
+          </TimelineItem>
+        ))}
+      </Timeline>
+    </section>
+  )}
+
+  <!-- Teaching -->
+  {teachingExperience && teachingExperience.length > 0 && (
+    <section class="exp-section">
+      <h2 class="section-heading">Teaching</h2>
+      <Timeline showLine={true}>
+        {teachingExperience.map((item) => (
+          <TimelineItem
+            title={item.role}
+            subtitle={item.institution}
+            date={item.date}
+            icon={item.icon || 'chalkboard-user'}
+            logo={getEntity(item.institution)?.logo}
+            logoDark={getEntity(item.institution)?.logoDark}
+            entityColor={getEntity(item.institution)?.color}
+            entityColorDark={getEntity(item.institution)?.colorDark}
+          >
+            <div class="tl-teaching-detail">
+              <span class="tl-course" set:html={item.course} />
+              <span class="tl-level">{item.level}</span>
+            </div>
+            {item.notes && (
+              <div class="tl-notes" set:html={item.notes} />
+            )}
+          </TimelineItem>
+        ))}
+      </Timeline>
+    </section>
+  )}
+
+  <!-- Invited Talks -->
+  {talks && talks.length > 0 && (
+    <section class="exp-section">
+      <h2 class="section-heading">Invited Talks</h2>
+      <Timeline showLine={false}>
+        {talks.map((talk) => (
+          <TimelineItem
+            title={talk.title}
+            subtitle={talk.venue}
+            date={talk.date}
+            icon={talk.icon || 'microphone'}
+            logo={getEntity(talk.venue)?.logo}
+            logoDark={getEntity(talk.venue)?.logoDark}
+            entityColor={getEntity(talk.venue)?.color}
+            entityColorDark={getEntity(talk.venue)?.colorDark}
+          />
+        ))}
+      </Timeline>
+    </section>
+  )}
+
+  <!-- Service & Community -->
+  {service && (service.organizing.length > 0 || service.reviewing.conferences || service.reviewing.journals || service.reviewing.programCommittee) && (
+    <section class="exp-section">
+      <h2 class="section-heading">Service &amp; Community</h2>
+
+      {service.organizing.length > 0 && (
+        <>
+          <h3 class="subsection-heading">Organizing</h3>
+          <Timeline showLine={false}>
+            {service.organizing.map((item) => (
+              <TimelineItem
+                title={item.role}
+                date={item.date}
+                icon={item.icon || 'users'}
+              >
+                <div class="tl-org-title" set:html={item.title} />
+                <div class="tl-desc" set:html={item.description} />
+              </TimelineItem>
+            ))}
+          </Timeline>
+        </>
+      )}
+
+      {(service.reviewing.conferences || service.reviewing.journals || service.reviewing.programCommittee) && (
+        <>
+          <h3 class="subsection-heading">Reviewing</h3>
+          <div class="reviewing-block">
+            {[
+              { label: 'Conference', venues: service.reviewing.conferences },
+              { label: 'Journal', venues: service.reviewing.journals },
+              { label: 'PC', venues: service.reviewing.programCommittee },
+            ].map(({ label, venues }) => (
+              venues ? (
+                <div class="reviewing-row">
+                  <span class="reviewing-label">{label}</span>
+                  <div class="reviewing-chips">
+                    {venues.split(',').map(v => v.trim()).filter(Boolean).map(v => {
+                      const award = service.reviewing.awards?.[v];
+                      return award ? (
+                        <span class="reviewing-chip reviewing-chip-silver" tabindex="0">
+                          <span class="reviewing-chip-medal" aria-hidden="true">🥈</span>
+                          {v}
+                          <span class="reviewing-chip-tooltip" role="tooltip">{award}</span>
+                        </span>
+                      ) : (
+                        <span class="reviewing-chip">{v}</span>
+                      );
+                    })}
+                  </div>
+                </div>
+              ) : null
+            ))}
+          </div>
+        </>
+      )}
+    </section>
+  )}
+
+  <!-- Awards & Honors -->
+  {awards && awards.length > 0 && (
+    <section class="exp-section">
+      <h2 class="section-heading">Awards &amp; Honors</h2>
+      <Timeline showLine={false}>
+        {awards.map((award) => (
+          <TimelineItem
+            title={award.title}
+            subtitle={award.organization}
+            date={award.date}
+            icon="award"
+            logo={getEntity(award.organization)?.logo}
+            logoDark={getEntity(award.organization)?.logoDark}
+            entityColor={getEntity(award.organization)?.color}
+            entityColorDark={getEntity(award.organization)?.colorDark}
+          />
+        ))}
+      </Timeline>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  /* ============================================
+     Sections & Headings
+     ============================================ */
+  .exp-section {
+    margin-bottom: 2.5rem;
+  }
+
+  .section-heading {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    margin-bottom: 1rem;
+    padding-bottom: 0.3rem;
+    border-bottom: 2px solid var(--color-accent);
+    display: inline-block;
+  }
+
+  .subsection-heading {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-heading);
+    margin-top: 1.25rem;
+    margin-bottom: 0.75rem;
+  }
+
+  /* ============================================
+     Timeline slot content — descriptions
+     ============================================ */
+  .tl-desc {
+    font-size: 13px;
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-top: 4px;
+  }
+
+  .tl-desc :global(a) { color: var(--color-link); }
+  .tl-desc :global(a:hover) { color: var(--color-link-hover); }
+  .tl-desc :global(strong) { font-weight: 600; color: var(--color-text); }
+
+  /* ============================================
+     Timeline slot content — teaching details
+     ============================================ */
+  .tl-teaching-detail {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 4px;
+  }
+
+  .tl-course {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .tl-course :global(a) { color: var(--color-link); }
+  .tl-course :global(a:hover) { color: var(--color-link-hover); }
+
+  .tl-level {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: transparent;
+    color: var(--color-text-tertiary);
+    border: 1px solid var(--color-border);
+    line-height: 1.5;
+    letter-spacing: 0.2px;
+  }
+
+  .tl-notes {
+    font-size: 12px;
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    margin-top: 3px;
+  }
+
+  .tl-notes :global(a) {
+    color: var(--color-link);
+    font-style: normal;
+  }
+
+  .tl-notes :global(em) {
+    font-style: italic;
+  }
+
+  /* ============================================
+     Timeline slot content — organizing title
+     ============================================ */
+  .tl-org-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-top: 2px;
+  }
+
+  .tl-org-title :global(a) { color: var(--color-link); }
+  .tl-org-title :global(a:hover) { color: var(--color-link-hover); }
+
+  /* ============================================
+     Reviewing — prose block (not timeline)
+     ============================================ */
+  .reviewing-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .reviewing-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .reviewing-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-text-secondary);
+    width: 80px;
+    flex-shrink: 0;
+    letter-spacing: 0.3px;
+  }
+
+  .reviewing-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .reviewing-chip {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text);
+    background: color-mix(in srgb, var(--color-accent) 8%, transparent);
+    border: 1px solid color-mix(in srgb, var(--color-accent) 20%, transparent);
+    padding: 2px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+
+  /* Silver reviewer award — special chip */
+  .reviewing-chip-silver {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: help;
+    color: #4a4a4a;
+    background: linear-gradient(135deg,
+      #f5f5f5 0%,
+      #d8d8d8 35%,
+      #ffffff 50%,
+      #cfcfcf 65%,
+      #e8e8e8 100%);
+    border: 1px solid #b0b0b0;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.08),
+      inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    font-weight: 600;
+  }
+
+  :global(.dark) .reviewing-chip-silver {
+    color: #e8e8e8;
+    background: linear-gradient(135deg,
+      #6a6a6a 0%,
+      #4a4a4a 35%,
+      #8a8a8a 50%,
+      #444444 65%,
+      #5a5a5a 100%);
+    border-color: #888;
+    box-shadow:
+      0 1px 2px rgba(0, 0, 0, 0.3),
+      inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  }
+
+  .reviewing-chip-medal {
+    font-size: 11px;
+    line-height: 1;
+  }
+
+  .reviewing-chip-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) translateY(4px);
+    background: var(--color-text);
+    color: var(--color-bg, #fff);
+    font-size: 11px;
+    font-weight: 500;
+    padding: 5px 9px;
+    border-radius: 6px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  .reviewing-chip-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 4px solid transparent;
+    border-top-color: var(--color-text);
+  }
+
+  .reviewing-chip-silver:hover .reviewing-chip-tooltip,
+  .reviewing-chip-silver:focus-visible .reviewing-chip-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ============================================
+     Mobile
+     ============================================ */
+  @media (max-width: 767px) {
+    .reviewing-block {
+      margin-left: 0;
+    }
+
+    .reviewing-row {
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .reviewing-label {
+      min-width: auto;
+    }
+  }
+</style>

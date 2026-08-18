@@ -1,0 +1,744 @@
+---
+title: "COPD Is Not One Disease"
+tags: ["COPD", "CT", "VIT"]
+date: 2026-08-18 00:00:00 -0400
+path: "posts/COPD-Phenotypes"
+excerpt: "A map from COPD phenotypes and symptoms to physiology, CT, function, and what patients actually report."
+cover: "/posts/COPD-Phenotypes/fig1_copd_layers.svg"
+---
+
+One person can have a lot of emphysema and almost no sputum.
+
+Someone else can have thick airways, a chronic cough, and frequent flares, with much less emphysema.
+
+A third person can already have a lot of small-airway trouble before spirometry looks dramatically bad.
+
+All three may still get called **COPD**.
+
+That is the first thing worth keeping in mind:
+
+> **COPD is a diagnosis. It is not one phenotype, and it is not one number.**
+
+If you work on imaging or virtual imaging trials, this matters because an endpoint has to match the actual question. If you use FEV$_1$ as a stand-in for emphysema, or LAA-950 as a stand-in for symptoms, you are asking one measurement to do a job it was not built for.
+
+A cleaner picture is
+
+$$
+\text{cause}
+\rightarrow
+\text{pathology}
+\rightarrow
+\text{phenotype}
+\rightarrow
+\text{physiology}
+\rightarrow
+\text{symptoms and outcomes},
+$$
+
+and different tests look at different parts of that chain.
+
+<figure class="figure-block figure-hero">
+  <img src="/posts/COPD-Phenotypes/fig1_copd_layers.svg" alt="COPD layers from etiologic exposure through pathology, phenotype, physiology, symptoms, and outcomes." />
+  <figcaption><strong>Figure 1.</strong> Think of COPD as a few linked layers. A measurement only tells you about the layer it actually sees.</figcaption>
+</figure>
+
+## 1. Diagnosis is not phenotype
+
+COPD is a mixed lung condition: lasting respiratory symptoms plus airflow obstruction, tied to airways, alveoli, or both. GOLD still uses spirometry to show that the obstruction is persistent, and post-bronchodilator numbers are used to confirm the diagnosis.[1]
+
+A handy shorthand is
+
+$$
+\mathrm{COPD}
+=
+\mathrm{airflow\ obstruction}
++
+\mathrm{clinical\ context}.
+$$
+
+Once you have the diagnosis, at least four different questions are still open:
+
+1. **What caused it?**
+2. **What structural disease is sitting there?**
+3. **How impaired is this person?**
+4. **How much does it mess with daily life and future risk?**
+
+Those questions are related. They are not the same question.
+
+### Etiotype
+
+An **etiotype** is why the disease showed up: cigarettes, pollution or biomass smoke, lungs that never fully developed, genetics such as alpha-1 antitrypsin deficiency, an old infection, asthma-linked disease, or something else.
+
+### Phenotype
+
+A **phenotype** is the pattern you can actually observe. In COPD that includes emphysema-heavy disease, airway-heavy disease, chronic bronchitis, small-airway disease, mucus plugging, frequent exacerbations, and pulmonary vascular involvement.
+
+### Biomarker or surrogate
+
+A **biomarker** is just a measurable feature of a biological state.
+
+A **surrogate endpoint** is a much bigger claim. It is a biomarker you are willing to treat as a stand-in for a clinical outcome.
+
+That gap is easy to forget and expensive if you do.
+
+> **LAA-950, Pi10, FEV$_1$, and 6-minute walk distance are measurements. Do not automatically call them validated surrogates for death, symptoms, or treatment benefit.**
+
+## 2. Think in phenotypes, not one COPD axis
+
+The useful phenotypes overlap. That is the point.
+
+<figure class="figure-block">
+  <img src="/posts/COPD-Phenotypes/fig2_phenotype_map.svg" alt="Map of overlapping COPD phenotypes including emphysema, airway disease, small airway disease, chronic bronchitis, mucus plugging, frequent exacerbations, and pulmonary vascular disease." />
+  <figcaption><strong>Figure 2.</strong> COPD phenotypes overlap. The same person can have emphysema, airway remodeling, mucus plugs, small-airway trouble, and a high flare risk all at once.</figcaption>
+</figure>
+
+### Emphysema-predominant COPD
+
+**Biology:** alveolar walls break down and distal airspaces get larger.
+
+**Symptoms that often show up first:** getting winded on exertion, poorer exercise tolerance, sometimes surprisingly little sputum.
+
+**Qualitative CT:**
+
+- centrilobular emphysema
+- panlobular emphysema
+- paraseptal emphysema
+- upper- versus lower-lung predominance
+- bullae
+- hyperinflation
+
+The Fleischner visual classes give a shared language for those patterns and grades, and they track with physiology and later outcomes.[6]
+
+**Quantitative CT:**
+
+$$
+\mathrm{LAA}_{-950}
+=
+100
+\frac{N(\mathrm{HU} \lt -950)}
+{N_{\mathrm{lung}}},
+$$
+
+where a larger inspiratory LAA-950 usually means more low-attenuation, emphysema-looking lung.
+
+Another one is the density percentile:
+
+$$
+P_{15}
+=
+15^{\mathrm{th}}\text{ percentile of the lung-density histogram}.
+$$
+
+A **more negative** Perc15 usually means lower-density lung and more destruction.
+
+These numbers care a lot about how deep the breath was, how you reconstructed, slice thickness, scanner calibration, and noise. A HU threshold is not independent of the imaging chain.
+
+### Airway-predominant COPD
+
+**Biology:** wall inflammation, remodeling, narrowing, and a lumen that no longer looks like the original tube.
+
+**Symptoms that often show up first:** cough, sputum, wheeze, dyspnea, that recurring bronchitic picture.
+
+**Qualitative CT:**
+
+- bronchial wall thickening
+- lumen narrowing
+- bronchiectasis when it is there
+- visible mucus
+- airway distortion
+
+**Quantitative CT:**
+
+For one airway cross-section,
+
+$$
+WA\%
+=
+100
+\frac{A_{\mathrm{wall}}}
+{A_{\mathrm{wall}}+A_{\mathrm{lumen}}}.
+$$
+
+Other branch-level numbers include
+
+- wall thickness, WT
+- wall area, WA
+- lumen area, LA
+- inner and outer diameter
+- hydraulic diameter
+- tapering
+- branch count
+- how far out the tree you can still see
+
+A common summary is **Pi10**, the estimated square-root wall area for a made-up airway with a 10 mm inner perimeter. Higher Pi10 usually means thicker walls. COPDGene linked higher Pi10 with worse FEV$_1$, a shorter 6-minute walk, and worse respiratory health status.[7]
+
+If you work on imaging, treat airway numbers with extra suspicion:
+
+> **Small-airway measurements can move when the CT changes, even if the airway did not.**
+
+Voxel size, slice thickness, kernel, denoising, dose, partial volume, and the segmentation code can all push WT and WA% around.
+
+### Chronic-bronchitis phenotype
+
+The classic clinical definition is cough and sputum for at least 3 months a year, in 2 years in a row.[8]
+
+This one is mainly **clinical**. It is not a CT threshold.
+
+Useful things to count include
+
+- how often they cough
+- how much sputum
+- what the sputum looks like
+- CAAT/CAT items
+- how often they flare
+- mucus burden on CT
+
+Chronic bronchitis and CT-visible wall disease overlap. They are not the same thing.
+
+### Small-airway-disease phenotype
+
+The small conducting airways are a big source of resistance in COPD. A lot of them sit below what ordinary CT can resolve.
+
+So we often measure them **sideways**.
+
+Useful physiology includes
+
+- expiratory flows
+- lung volumes
+- RV/TLC
+- oscillometry
+- ventilation heterogeneity
+
+Useful imaging includes expiratory air trapping and parametric response mapping.
+
+A simple expiratory threshold looks like
+
+$$
+\mathrm{LAA}_{-856,\ exp}
+=
+100
+\frac{N(\mathrm{HU} \lt -856 \text{ on expiration})}
+{N_{\mathrm{lung}}}.
+$$
+
+People use this a lot in research as “low attenuation on expiration.” It is also very sensitive to how hard the person exhaled and how you scanned.
+
+If you register inspiration and expiration, **parametric response mapping (PRM)** labels matching voxels. The classic PRM split is emphysema versus non-emphysematous gas trapping, which people read as functional small-airway disease.[9]
+
+In words,
+
+$$
+\mathrm{PRM}_{fSAD}
+=
+\text{non-emphysematous lung that stays too dark on expiration}.
+$$
+
+That is why PRM is appealing when the question is *where small-airway dysfunction lives before the tissue is obviously destroyed*.
+
+### Mucus-plugging phenotype
+
+Mucus plugs are not just a visual annoyance.
+
+CT-visible plugs that block airways have been tied to worse lung function, worse respiratory health status, and mortality in COPD cohorts.[10]
+
+Things you can count include
+
+- plug present or not
+- how many segments are involved
+- a plug score
+- plug volume
+- percent of branches occluded
+- which generation and which lobe
+- how the burden changes over time
+
+One imaging catch: **seeing it is not the same as the biology**. Thicker slices, smoother kernels, more noise, and a limited airway segmentation can make the same plug look smaller, or make it vanish.
+
+### Frequent-exacerbator phenotype
+
+An exacerbation is a **clinical event**. It is not an imaging pattern.
+
+Useful counts include
+
+- moderate exacerbations per year
+- severe exacerbations or hospitalizations per year
+- time to the next one
+- exacerbation rate
+- days alive and out of hospital
+- rescue-medication use
+
+GOLD 2026 changed A/B/E so that **one moderate exacerbation in the prior year is enough for Group E**, because even one of those raises later risk.[1]
+
+### Pulmonary-vascular phenotype
+
+COPD can also remodel the pulmonary vessels and lead to pulmonary hypertension.
+
+Measurements may include
+
+- pulmonary artery diameter
+- pulmonary artery-to-aorta ratio, PA:A
+- small-vessel volume
+- perfusion metrics
+- echo estimates
+- right-heart catheterization when that is actually indicated
+
+A PA:A ratio above 1 on CT has been linked to severe exacerbations. Treat it as a risk-related imaging biomarker, not as a diagnosis of pulmonary hypertension by itself.[11]
+
+## 3. Symptoms are another measurement domain
+
+COPD can look ugly on CT and feel mild. It can also feel terrible with a milder-looking scan.
+
+Typical symptoms include
+
+- dyspnea
+- chronic cough
+- sputum
+- wheezing
+- chest tightness
+- poor exercise tolerance
+- fatigue
+- sleep trouble
+- activity limits
+- flare-ups
+
+FEV$_1$ does not swallow all of that.
+
+<figure class="figure-block">
+  <img src="/posts/COPD-Phenotypes/fig3_measurement_domains.svg" alt="Different COPD measurement domains showing symptoms, physiology, structure, function, and outcomes." />
+  <figcaption><strong>Figure 3.</strong> Symptoms, structure, physiology, what the person can actually do, and later outcomes are separate domains that still talk to each other.</figcaption>
+</figure>
+
+### mMRC dyspnea scale
+
+The modified Medical Research Council scale is mostly about how much **breathlessness** gets in the way of activity.
+
+It is simple and useful. It is also deliberately narrow.
+
+A higher score means more activity limitation from dyspnea.
+
+### CAAT / CAT
+
+GOLD 2026 says **Chronic Airways Assessment Test (CAAT)**. A lot of older COPD papers still say CAT. Same 8-item, 0-40 questionnaire. Higher is worse health status.[1]
+
+A score around 10 is the usual GOLD split between lower and greater symptom burden.
+
+### SGRQ
+
+The St. George's Respiratory Questionnaire is longer and still widely used in research.
+
+Higher SGRQ means worse respiratory health status.
+
+For a VIT, these patient-reported scores are usually **clinical anchors on the outside**. A CT simulator does not spit them out.
+
+## 4. Spirometry measures obstruction, not the whole disease
+
+The main spirometry numbers are
+
+$$
+FEV_1
+=
+\text{volume forcibly exhaled in the first second},
+$$
+
+$$
+FVC
+=
+\text{forced vital capacity},
+$$
+
+and
+
+$$
+\frac{FEV_1}{FVC}.
+$$
+
+GOLD uses post-bronchodilator spirometry to confirm that the obstruction is still there.[1]
+
+After the diagnosis is in, people still grade airflow obstruction with post-bronchodilator FEV$_1$ percent predicted:
+
+| GOLD airflow grade | FEV$_1$ % predicted | Interpretation |
+|---|---:|---|
+| GOLD 1 | $\ge 80\%$ | mild airflow obstruction |
+| GOLD 2 | $50-79\%$ | moderate |
+| GOLD 3 | $30-49\%$ | severe |
+| GOLD 4 | $\lt 30\%$ | very severe |
+
+This table is useful.
+
+It is also incomplete.
+
+Two people with the same FEV$_1$ can still differ in
+
+- emphysema burden
+- airway disease
+- symptoms
+- exercise capacity
+- flare risk
+- oxygenation
+- other illnesses
+- outlook
+
+That is why COPD severity is more like a **set of coordinates** than a single ruler.
+
+<figure class="figure-block">
+  <img src="/posts/COPD-Phenotypes/fig4_severity_coordinates.svg" alt="COPD severity shown as multiple coordinates: airflow obstruction, symptoms, exacerbations, gas exchange, exercise capacity, and structural disease." />
+  <figcaption><strong>Figure 4.</strong> There is no one complete COPD severity axis. GOLD airflow grade and A/B/E grouping answer different questions. Add function, gas exchange, and structure when those are part of the story.</figcaption>
+</figure>
+
+## 5. Lung volumes show air trapping and hyperinflation
+
+Spirometry tells you how fast air leaves.
+
+Lung-volume testing asks how much air is still sitting there.
+
+The big ones are
+
+- TLC: total lung capacity
+- RV: residual volume
+- FRC: functional residual capacity
+- inspiratory capacity, IC
+- RV/TLC
+
+In obstructive disease, **larger RV and RV/TLC** usually mean more trapped gas.
+
+Hyperinflation can also shrink inspiratory capacity and make people very short of breath on exertion, even when FEV$_1$ has not moved much.
+
+A useful reminder:
+
+$$
+\text{obstruction}
+\neq
+\text{air trapping}
+\neq
+\text{hyperinflation}.
+$$
+
+They are connected. They are not identical.
+
+## 6. DLCO is asking a different question
+
+DLCO, the diffusing capacity for carbon monoxide, estimates gas transfer across the alveolar-capillary system.
+
+A lower DLCO can mean
+
+- less gas-exchange surface from emphysema
+- pulmonary vascular disease
+- anemia or other whole-body effects
+- some mix of those
+
+In emphysema-heavy COPD, DLCO often tells you something spirometry cannot.
+
+Again:
+
+> FEV$_1$ describes airflow. DLCO describes gas transfer.
+
+A careful imaging study should not treat one as if it were the other.
+
+## 7. Functional performance connects the lung to the person
+
+The **6-minute walk test (6MWT)** is about what someone can actually do.
+
+The main outcome is
+
+$$
+6MWD = \text{distance walked in 6 minutes}.
+$$
+
+Lower 6MWD tracks with worse outcomes in chronic respiratory disease. Continuous pulse oximetry can catch the lowest SpO$_2$, and you can score dyspnea and fatigue before and after. ATS/ERS standards also remind you that the test is picky about method and has a learning effect, so repeats have to be done the same way.[4]
+
+Other functional pieces include
+
+- desaturation on exercise
+- heart-rate response
+- Borg dyspnea
+- cardiopulmonary exercise testing
+- peak oxygen uptake
+- daily activity from a wearable
+
+These answer a practical question:
+
+> **What can this person actually do?**
+
+## 8. Composite scores mash domains on purpose
+
+The **BODE index** puts together
+
+- **B**ody mass index
+- airflow **O**bstruction
+- **D**yspnea
+- **E**xercise capacity
+
+It exists because FEV$_1$ alone does not capture prognosis as well as a few dimensions together.[12]
+
+That is a useful lesson for VIT work.
+
+One biomarker is tempting because it is easy to simulate and easy to plot.
+
+A patient outcome is multidimensional because the disease is.
+
+## 9. A metric atlas for COPD studies
+
+The table below is a working map. It is not a claim that every study needs every metric.
+
+| Domain | Metric | Modality/test | What it mainly measures | Typical direction with greater disease burden* |
+|---|---|---|---|---|
+| Airflow | FEV$_1$ | spirometry | expiratory airflow | ↓ |
+| Airflow | FEV$_1$/FVC | spirometry | obstruction | ↓ |
+| Volume | RV | plethysmography | trapped gas | ↑ |
+| Volume | RV/TLC | plethysmography | relative air trapping | ↑ |
+| Hyperinflation | IC | spirometry/lung volume | inspiratory reserve | often ↓ |
+| Gas exchange | DLCO | diffusion test | alveolar-capillary transfer | often ↓ |
+| Oxygenation | resting SpO$_2$ | pulse oximetry | oxygen saturation | may ↓ |
+| Exercise | 6MWD | 6MWT | functional exercise capacity | ↓ |
+| Exercise | nadir SpO$_2$ | 6MWT | exertional desaturation | ↓ |
+| Symptoms | mMRC | questionnaire | dyspnea limitation | ↑ |
+| Health status | CAAT/CAT | questionnaire | respiratory health burden | ↑ |
+| Health status | SGRQ | questionnaire | respiratory quality-of-life impairment | ↑ |
+| Events | exacerbations/year | clinical record | disease activity/risk | ↑ |
+| Events | hospitalizations/year | clinical record | severe exacerbation burden | ↑ |
+| Emphysema | LAA-950 | inspiratory CT | low-density emphysematous lung | ↑ |
+| Emphysema | Perc15 | inspiratory CT | lung-density distribution | more negative / ↓ |
+| Air trapping | LAA-856 exp | expiratory CT | low attenuation on expiration | ↑ |
+| Air trapping | E/I density ratio | paired CT | incomplete expiratory density change | ↑ |
+| Small airways | PRM-fSAD | registered insp/exp CT | non-emphysematous gas trapping | ↑ |
+| Airways | WT | CT | wall thickness | often ↑ |
+| Airways | WA% | CT | wall fraction | often ↑ |
+| Airways | lumen area | CT | airway caliber | may ↓ |
+| Airways | Pi10 | CT | standardized airway wall thickness | ↑ |
+| Airways | tapering | CT | caliber drop along the tree | abnormal pattern |
+| Airways | branch count | CT | how much tree you can still see | often ↓ with severe disease/technical loss |
+| Mucus | mucus-plug score | CT | number/distribution of occluded airways | ↑ |
+| Mucus | plug volume | CT | segmented mucus burden | ↑ |
+| Vascular | PA:A | CT | pulmonary arterial enlargement proxy | ↑ |
+| Structure | visual emphysema grade | CT | morphologic emphysema severity | ↑ |
+| Composite | BODE | multiple | multidimensional prognosis | ↑ |
+
+\*These are general patterns, not universal causal rules. Plenty of metrics also move with technique, demographics, effort, other illness, or phenotype.
+
+<figure class="figure-block">
+  <img src="/posts/COPD-Phenotypes/fig5_metric_atlas.svg" alt="COPD metric atlas grouping measurements by structure, physiology, symptoms, function and events." />
+  <figcaption><strong>Figure 5.</strong> Pick endpoints from the domain that matches the hypothesis. Do not collect every number just because you can.</figcaption>
+</figure>
+
+## 10. CT gives you structure - but the imaging chain moves the number
+
+For quantitative COPD CT, what you observe is not just biology:
+
+$$
+M_{\mathrm{CT}}
+=
+f(
+\text{disease},
+\text{inspiration},
+\text{dose},
+\text{resolution},
+\text{noise},
+\text{kernel},
+\text{slice thickness},
+\text{segmentation}
+).
+$$
+
+That hits different biomarkers in different ways.
+
+### Density metrics
+
+Emphysema and air-trapping numbers care about
+
+- lung inflation
+- scanner calibration
+- dose and noise
+- reconstruction kernel
+- slice thickness
+- iterative or deep-learning reconstruction
+
+### Airway metrics
+
+WT and WA% are extra sensitive to
+
+- voxel size
+- spatial resolution
+- airway orientation
+- partial volume
+- airway segmentation
+- how sharp the reconstruction is
+
+### PRM
+
+PRM also depends on
+
+- reproducible inspiration and expiration
+- deformable registration
+- density calibration
+- the thresholds you picked
+
+### Mucus
+
+Mucus numbers also depend on
+
+- airway-lumen segmentation
+- HU rules
+- object-size cutoff
+- how you define connectivity
+- resolution
+- partial volume
+
+This is exactly where a VIT earns its keep.
+
+If the COPD phantom stays the same and only the CT acquisition changes, then
+
+$$
+\Delta M
+=
+M_{\mathrm{protocol\ B}}
+-
+M_{\mathrm{protocol\ A}}
+$$
+
+can tell you **measurement bias from imaging**, not biological progression.
+
+<figure class="figure-block">
+  <img src="/posts/COPD-Phenotypes/fig6_vit_copd_endpoint.svg" alt="Virtual imaging trial concept separating fixed COPD ground truth from acquisition-dependent observed quantitative CT metrics." />
+  <figcaption><strong>Figure 6.</strong> In a COPD VIT you can freeze the pathology and change the scanner settings. The gap between the measured number and the known truth is the endpoint.</figcaption>
+</figure>
+
+## 11. Let the phenotype pick the endpoint
+
+Suppose the hypothesis is:
+
+> “A higher-resolution CT reconstruction improves quantitative assessment of COPD.”
+
+That is too broad.
+
+Which piece of COPD?
+
+For **emphysema**, pick something like
+
+$$
+|\mathrm{LAA}_{-950}^{CT} - \mathrm{LAA}_{-950}^{GT}|
+$$
+
+or Perc15 bias.
+
+For **airway remodeling**, pick
+
+$$
+\Delta WT
+=
+WT_{CT}-WT_{GT}
+$$
+
+and
+
+$$
+\Delta WA\%
+=
+WA\%_{CT}-WA\%_{GT}.
+$$
+
+For **mucus**, pick object-level sensitivity, false positives, plug-volume error, or a segment-level plug score.
+
+For **small-airway disease**, pick expiratory air-trapping error or PRM classification error.
+
+A good study question looks like
+
+$$
+\boxed{
+\text{phenotype}
++
+\text{measurement}
++
+\text{imaging perturbation}
++
+\text{ground truth}
+}
+$$
+
+not just “COPD image quality.”
+
+## 12. A graduate-level exercise
+
+Pick **one COPD phenotype** and design a quantitative experiment.
+
+Before you choose a scanner protocol, write down:
+
+1. phenotype
+2. biological ground truth
+3. qualitative look
+4. quantitative biomarker
+5. clinical or physiologic correlate
+6. expected direction as disease gets worse
+7. important confounders
+8. imaging sources of measurement bias
+9. primary endpoint
+10. validation experiment
+
+For example:
+
+```yaml
+phenotype:
+  name: "airway-predominant COPD"
+
+ground_truth:
+  wall_thickness_mm: known
+  lumen_area_mm2: known
+  mucus_objects: known
+
+imaging_factors:
+  pixel_size_mm: [0.35, 0.50, 0.75]
+  slice_thickness_mm: [0.25, 0.625, 1.0]
+  reconstruction: ["medium", "sharp"]
+  dose: ["low", "reference"]
+
+quantitative_endpoints:
+  primary: "absolute WT error"
+  secondary:
+    - "WA% signed error"
+    - "branch detection rate"
+    - "mucus object sensitivity"
+
+clinical_anchor:
+  examples:
+    - "FEV1"
+    - "CAAT"
+    - "exacerbation history"
+
+analysis:
+  design: "paired by identical virtual airway"
+  question: "Which imaging factor changes measurement accuracy?"
+```
+
+The scanner does not define the experiment.
+
+The disease model does not define the experiment.
+
+The metric does not define the experiment.
+
+**The link among phenotype, ground truth, measurement, and clinical meaning does.**
+
+---
+
+## References
+
+1. Global Initiative for Chronic Obstructive Lung Disease. **Global Strategy for Prevention, Diagnosis and Management of COPD: 2026 Report.** https://goldcopd.org/2026-gold-report-and-pocket-guide/
+
+2. Stanojevic S, Kaminsky DA, Miller MR, et al. **ERS/ATS technical standard on interpretive strategies for routine lung function tests.** *European Respiratory Journal.* 2022;60:2101499. https://doi.org/10.1183/13993003.01499-2021
+
+3. Graham BL, Steenbruggen I, Miller MR, et al. **Standardization of Spirometry 2019 Update. An Official ATS/ERS Technical Statement.** *American Journal of Respiratory and Critical Care Medicine.* 2019;200:e70-e88. https://doi.org/10.1164/rccm.201908-1590ST
+
+4. Holland AE, Spruit MA, Troosters T, et al. **An official ERS/ATS technical standard: field walking tests in chronic respiratory disease.** *European Respiratory Journal.* 2014;44:1428-1446. https://doi.org/10.1183/09031936.00150314
+
+5. COPDGene Study. **Imaging in COPDGene.** https://copdgene.org/imaging-in-copdgene/
+
+6. Lynch DA, Austin JHM, Hogg JC, et al. **CT-Definable Subtypes of Chronic Obstructive Pulmonary Disease: A Statement of the Fleischner Society.** *Radiology.* 2015;277:192-205. https://doi.org/10.1148/radiol.2015141579
+
+7. Charbonnier JP, Pompe E, Moore C, et al. **Airway wall thickening on CT: Relation to smoking status and severity of COPD.** *Respiratory Medicine.* 2019;146:36-41. https://pubmed.ncbi.nlm.nih.gov/30665516/
+
+8. Lahousse L, Seys LJM, Joos GF, et al. **Epidemiology and impact of chronic bronchitis in chronic obstructive pulmonary disease.** *European Respiratory Journal.* 2017. https://pubmed.ncbi.nlm.nih.gov/28798087/
+
+9. Galbán CJ, Han MK, Boes JL, et al. **Computed tomography-based biomarker provides unique signature for diagnosis of COPD phenotypes and disease progression.** *Nature Medicine.* 2012;18:1711-1715. https://pubmed.ncbi.nlm.nih.gov/23042237/
+
+10. Diaz AA, Orejas JL, Grumley S, et al. **Airway-Occluding Mucus Plugs and Mortality in Patients With Chronic Obstructive Pulmonary Disease.** *JAMA.* 2023;329:1832-1839. https://pubmed.ncbi.nlm.nih.gov/37210745/
+
+11. Wells JM, Washko GR, Han MK, et al. **Pulmonary arterial enlargement and acute exacerbations of COPD.** *New England Journal of Medicine.* 2012;367:913-921. https://pubmed.ncbi.nlm.nih.gov/22938715/
+
+12. Celli BR, Cote CG, Marin JM, et al. **The Body-Mass Index, Airflow Obstruction, Dyspnea, and Exercise Capacity Index in Chronic Obstructive Pulmonary Disease.** *New England Journal of Medicine.* 2004;350:1005-1012. https://doi.org/10.1056/NEJMoa021322

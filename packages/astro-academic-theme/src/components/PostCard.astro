@@ -1,0 +1,123 @@
+---
+import Tag from './Tag.astro';
+import { marked } from 'marked';
+
+interface Props {
+  title: string;
+  href: string;
+  date: Date;
+  excerpt: string;
+  tags?: string[];
+  tagColors?: string[];
+  cover?: string;
+}
+
+const { title, href, date, excerpt, tags = [], tagColors = [], cover } = Astro.props;
+
+const formattedDate = date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+---
+
+<!-- RSuite Panel bordered, padding 0, height 100% -->
+<div class="post-card">
+  <div class="card-image-wrap">
+    <a href={href}>
+      {cover ? (
+        <img src={cover} alt={title} class="card-image" />
+      ) : (
+        <div class="card-image-placeholder"></div>
+      )}
+    </a>
+  </div>
+  <div class="card-body">
+    <h5><a href={href}>{title}</a></h5>
+    <div class="tags-row">
+      {tags.map((tag, i) => (
+        <Tag name={tag} color={tagColors[i % tagColors.length]} />
+      ))}
+    </div>
+    {excerpt && (
+      <a href={href} class="excerpt-link">
+        <p class="excerpt"><Fragment set:html={marked.parseInline(excerpt)} /></p>
+      </a>
+    )}
+  </div>
+</div>
+
+<style>
+  .post-card {
+    height: 100%;
+    border: none;
+    border-top: 3px solid var(--color-primary);
+    border-radius: 0;
+    overflow: hidden;
+    background: var(--color-bg-card);
+    cursor: pointer;
+    box-shadow: 0 1px 0 var(--color-border);
+  }
+
+  .card-image-wrap {
+    position: relative;
+    width: 100%;
+    /* Fixed 16:9 container — image never overflows */
+    padding-top: 56.25%;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .card-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .card-image-placeholder {
+    /* Already handled by the parent padding-top */
+  }
+
+  .card-body {
+    padding: 0.8rem;
+  }
+
+  .card-body h5 {
+    font-size: 1.15rem;
+    white-space: normal;
+    line-height: 1.3;
+    margin-bottom: 0.4rem;
+    font-family: var(--font-serif);
+  }
+
+  .card-body h5 a {
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .card-body h5 a:hover {
+    color: var(--color-heading);
+  }
+
+  .tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .excerpt {
+    margin-top: 1rem;
+    margin-bottom: 0;
+    color: var(--color-text-secondary);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .excerpt-link {
+    color: inherit;
+    text-decoration: none;
+  }
+</style>

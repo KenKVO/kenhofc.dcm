@@ -1,0 +1,373 @@
+---
+import BaseLayout from '@/layouts/Layout.astro';
+import ResearchCard from 'astro-academic-theme/components/ResearchCard.astro';
+import SocialLinks from 'astro-academic-theme/components/SocialLinks.astro';
+import { siteConfig } from '@/config';
+import { renderMarkdown } from '@/lib/markdown';
+import { highlightEntities } from '@/lib/entities';
+import { getCollection } from 'astro:content';
+
+// Get selected research
+const allResearch = await getCollection('research');
+const selectedResearch = allResearch
+  .filter((r) => r.data.selected)
+  .sort((a, b) => {
+    const pa = a.data.priority ?? 0;
+    const pb = b.data.priority ?? 0;
+    if (pa !== pb) return pa - pb;
+    return a.data.title.localeCompare(b.data.title);
+  });
+
+// Build a stable tag→color map using ALL research tags (same order as research page)
+const allResearchTags = [...new Set(allResearch.flatMap((r) => r.data.tags))];
+const tagColorMap = new Map<string, string>();
+allResearchTags.forEach((tag, i) => {
+  tagColorMap.set(tag, siteConfig.tagColors[i % siteConfig.tagColors.length]);
+});
+function colorsFor(tags: string[]): string[] {
+  return tags.map((t) => tagColorMap.get(t) || siteConfig.tagColors[0]);
+}
+
+// Render introduction markdown
+const introHtml = highlightEntities(
+  siteConfig.introduction
+    .map((para) => renderMarkdown(para))
+    .join('\n')
+);
+
+// Render research intro markdown
+const researchIntroHtml = highlightEntities(
+  (siteConfig.researchIntro ?? [])
+    .map((p) => renderMarkdown(p))
+    .join('\n')
+);
+
+// Render news items
+const newsItems = (siteConfig.news ?? []).map((item) => {
+  const parts = item.date.split(/\s+/);
+  // Normalize months to a uniform 3-letter form ("Jun. " / "May" → "Jun" / "May")
+  // so all date pills have the same text length
+  const month = parts.length > 1 ? parts[0].replace('.', '').slice(0, 3) : '';
+  const year = parts.length > 1 ? parts[1] : item.date;
+  return {
+    date: item.date,
+    month,
+    year,
+    html: highlightEntities(renderMarkdown(item.text)),
+    papers: item.papers,
+  };
+});
+
+// Render misc
+const miscHtml = siteConfig.misc ? renderMarkdown(siteConfig.misc) : '';
+---
+
+<BaseLayout config={siteConfig} currentPath="/">
+  <section class="home-hero">
+    <img src={`/${siteConfig.avatar}`} alt={siteConfig.author} class="hero-photo" />
+    <div class="hero-copy">
+      <p class="hero-roles">{siteConfig.professions.join(' · ')}</p>
+      {siteConfig.quote && <p class="hero-quote">{siteConfig.quote}</p>}
+      {siteConfig.location && <p class="hero-meta">{siteConfig.location}</p>}
+      <SocialLinks links={siteConfig.social} />
+    </div>
+  </section>
+
+  <!-- About Me -->
+  <section>
+    <div class="markdown-body intro-content" set:html={introHtml} />
+  </section>
+
+  <!-- Research -->
+  {researchIntroHtml && (
+    <section class="mt-6">
+      <h3 class="section-heading">Research</h3>
+      <div class="markdown-body research-content" set:html={researchIntroHtml} />
+    </section>
+  )}
+
+  <!-- News -->
+  {newsItems.length > 0 && (
+    <section class="mt-6">
+      <h3 class="section-heading">News</h3>
+      <ul class="news-list">
+        {newsItems.map((item) => (
+          <li>
+            <span class="news-date">
+              <span class="news-date-month">{item.month}</span>
+              <span class="news-date-year">{item.year}</span>
+            </span>
+            <div class="news-body">
+              <span class="news-text" set:html={item.html} />
+              {item.papers && item.papers.length > 0 && (
+                <span class="news-papers">
+                  {item.papers.map((p, i) => (
+                    <>
+                      {i > 0 && <span class="news-paper-sep">&middot;</span>}
+                      <a href={p.href} class="news-paper-link">
+                        <i class={p.icon || 'fas fa-file-lines'}></i> {p.title}
+                      </a>
+                    </>
+                  ))}
+                </span>
+              )}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+
+  <style>
+    .section-heading {
+      font-family: var(--font-serif);
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--color-border);
+      display: block;
+    }
+
+    .home-hero {
+      display: flex;
+      gap: 1.35rem;
+      align-items: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .hero-photo {
+      width: 132px;
+      height: 132px;
+      object-fit: cover;
+      border-radius: 2px;
+      flex-shrink: 0;
+    }
+
+    .hero-copy {
+      min-width: 0;
+    }
+
+    .hero-roles {
+      margin: 0 0 0.35rem;
+      font-size: 0.82rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+    }
+
+    .hero-quote {
+      margin: 0 0 0.4rem;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 1.25rem;
+      color: var(--color-heading);
+    }
+
+    .hero-meta {
+      margin: 0 0 0.5rem;
+      color: var(--color-text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .home-hero :global(.social-links) {
+      justify-content: flex-start;
+      padding: 0;
+    }
+
+    @media (max-width: 560px) {
+      .home-hero {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+
+    /* Italic keywords in research prose: subtle accent underline */
+    .research-content :global(p em) {
+      font-style: italic;
+      text-decoration: underline;
+      text-decoration-color: color-mix(in srgb, var(--color-accent) 40%, transparent);
+      text-underline-offset: 2px;
+      text-decoration-thickness: 1.5px;
+    }
+
+    /* Bold text in research prose (e.g., "data"): accent colored */
+    .research-content :global(p strong) {
+      color: var(--color-accent);
+    }
+
+    /* Direction titles in the numbered list */
+    .research-content :global(ol strong) {
+      color: var(--color-accent);
+      cursor: default;
+      transition: text-shadow 0.3s ease;
+    }
+
+    .research-content :global(ol strong:hover) {
+      animation: keyword-glow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes keyword-glow {
+      0%, 100% { text-shadow: 0 0 4px color-mix(in srgb, var(--color-accent) 40%, transparent); }
+      50% { text-shadow: 0 0 12px color-mix(in srgb, var(--color-accent) 70%, transparent); }
+    }
+
+    .news-list {
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+      padding-left: 0;
+      list-style: none;
+    }
+
+    .news-list li {
+      display: grid;
+      grid-template-columns: 5.5rem 1fr;
+      gap: 0.85em;
+      padding: 0.55em 0;
+      font-size: 16px;
+      line-height: 1.6;
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .news-date {
+      flex-shrink: 0;
+      width: auto;
+      font-size: 0.78em;
+      font-family: var(--font-sans);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      text-align: left;
+      color: var(--color-accent);
+      border: none;
+      padding: 0;
+      border-radius: 0;
+      height: fit-content;
+      margin-top: 4px;
+    }
+
+    .news-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .news-text {
+      display: inline;
+    }
+
+    /* Strip wrapping <p> tags from inline markdown in news items */
+    .news-text :global(p) {
+      margin: 0;
+      display: inline;
+    }
+
+    .news-papers {
+      display: inline;
+      margin-left: 0.4em;
+    }
+
+    .news-paper-link {
+      font-size: 0.8em;
+      color: var(--color-link);
+      text-decoration: none;
+      border: 1px solid color-mix(in srgb, var(--color-link) 30%, transparent);
+      padding: 0px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+      transition: background 0.2s;
+    }
+
+    .news-paper-link:hover {
+      background: color-mix(in srgb, var(--color-link) 10%, transparent);
+    }
+
+    .news-paper-link i {
+      font-size: 0.85em;
+      margin-right: 2px;
+    }
+
+    .news-paper-sep {
+      margin: 0 3px;
+      color: var(--color-text-tertiary);
+    }
+
+    .research-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+    }
+
+    .research-list > :global(*) {
+      scroll-snap-align: start;
+    }
+
+    @media (max-width: 480px) {
+      .news-date {
+        width: auto;
+        font-size: 0.7em;
+        padding: 2px 6px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        line-height: 1.3;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .research-list {
+        flex-direction: row;
+        max-height: none;
+        overflow-y: visible;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        padding-right: 0;
+        padding-bottom: 0.5rem;
+      }
+
+      .research-list > :global(*) {
+        flex: 0 0 85%;
+      }
+    }
+  </style>
+
+  <!-- Selected Research -->
+  {selectedResearch.length > 0 && (
+    <section class="mt-8">
+      <h3 class="section-heading">Selected Research</h3>
+      <div class="research-list">
+        {selectedResearch.map((paper) => (
+          <ResearchCard
+            title={paper.data.title}
+            href={`/${paper.data.path}/`}
+            date={paper.data.date}
+            excerpt={paper.data.excerpt}
+            authors={paper.data.authors}
+            venue={paper.data.venue}
+            tags={paper.data.tags}
+            tagColors={colorsFor(paper.data.tags)}
+            links={paper.data.links}
+            cover={paper.data.cover}
+            tagHrefBase="/research/"
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Misc -->
+  {miscHtml && (
+    <section class="mt-6">
+      <h3 class="section-heading">Misc</h3>
+      <div class="markdown-body" set:html={miscHtml} />
+    </section>
+  )}
+</BaseLayout>

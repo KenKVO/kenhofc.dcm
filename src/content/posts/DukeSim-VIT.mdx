@@ -1,0 +1,375 @@
+---
+title: "A CT Scan That Never Happened"
+tags: ["VIT", "CT", "DukeSim"]
+date: 2023-03-18 00:00:00 -0400
+path: "posts/DukeSim-VIT"
+excerpt: "Virtual imaging trials with DukeSim: keeping the patient fixed so you can actually change the CT."
+cover: "/posts/DukeSim-VIT/fig1_vit_pipeline.svg"
+---
+
+Suppose we want a simple CT question answered:
+
+> **Does protocol B make a 6 mm lung nodule easier to detect than protocol A?**
+
+The obvious experiment is to scan the same person twice. Then again at another dose. Then with another kernel. Then with a thinner slice. Pretty soon that is unethical, expensive, and - because the person moves and breathes - not actually controlled.
+
+A **virtual imaging trial (VIT)** changes the experiment. Instead of asking someone to come back to the scanner, we keep a computational patient fixed and change the imaging system around them.
+
+The useful idea is not *synthetic images*. It is **controlled counterfactuals**.
+
+<figure class="figure-block figure-hero">
+  <img src="/posts/DukeSim-VIT/fig1_vit_pipeline.svg" alt="Virtual imaging trial pipeline from virtual patient through DukeSim, reconstruction, reader, and endpoint." />
+  <figcaption><strong>Figure 1.</strong> A VIT is a chain of models. The trial is defined by what you hold still, what you vary, and what you measure at the end.</figcaption>
+</figure>
+
+## 1. The trial comes before the simulator
+
+A common mistake is to start with:
+
+> “What knobs can I turn in DukeSim?”
+
+Start instead with:
+
+> “What causal comparison do I actually want?”
+
+Let a virtual patient be $X_j$, with known task-specific ground truth $G_j$. A CT image can be written as
+
+$$
+I_{j,\theta,\phi}
+=
+\mathcal{R}_{\phi}
+\left(
+\mathcal{S}_{\theta}(X_j)
+\right),
+$$
+
+where
+
+- $\mathcal{S}_{\theta}$ is the scanner model with acquisition parameters $\theta$
+- $\mathcal{R}_{\phi}$ is reconstruction with parameters $\phi$
+- $I$ is the reconstructed image
+
+A reader - a person, a model observer, a segmentation algorithm, or an AI system - then produces
+
+$$
+\hat{G}_{j,\theta,\phi}
+=
+\mathcal{A}
+\left(
+I_{j,\theta,\phi}
+\right).
+$$
+
+The trial endpoint is a comparison with truth:
+
+$$
+Y_{j,\theta,\phi}
+=
+m\left(
+\hat{G}_{j,\theta,\phi}, G_j
+\right).
+$$
+
+That last function $m(\cdot)$ is where the scientific question lives. It might be detection AUC, sensitivity at a fixed operating point, airway-wall error, lesion-volume bias, calcium-score error, or some other figure of merit that actually matters clinically.
+
+> **Checkpoint.** Before you run anything, write down the virtual patient, the factor you are varying, the ground truth, and the endpoint. If one of those is missing, the trial is not designed yet.
+
+## 2. A virtual patient is more than anatomy
+
+For CT VITs, the computational patient is usually a voxelized picture of anatomy and material. XCAT is one example. Its phantoms can carry detailed anatomy, motion, and controlled pathology, and XCAT 3.0 is a large library of personalized digital phantoms.[3]
+
+The big difference from a clinical scan is that the phantom can carry **exact labels**:
+
+- where the lesion is
+- its diameter and volume
+- which voxels belong to the airway wall
+- which structures moved
+- what tissue was assigned
+- what changed between two virtual disease states
+
+Those labels are not notes you add after the fact. They are part of the world that made the image.
+
+That is a rare luxury in medical imaging. You can know the answer before you image the patient.
+
+## 3. DukeSim is the forward model
+
+DukeSim is a GPU CT simulator that makes scanner-specific projections and reconstructed images from voxelized phantoms. In the original framework, the primary signal is ray tracing and scatter is Monte Carlo. It also models detector and acquisition effects such as quantum and electronic noise, detector response, focal-spot effects, bowtie filtration, and other scanner-specific physics.[1]
+
+DukeSim v1.2 takes a voxelized phantom and material file, acquisition geometry, spectrum and bowtie information, detector response, and a protocol file. It can output sinograms, reconstructed images, and dose estimates. The current release covers energy-integrating and photon-counting detectors, and it ships with an FBP reconstruction tool.[2]
+
+<figure class="figure-block">
+  <img src="/posts/DukeSim-VIT/fig2_dukesim_forward_model.svg" alt="DukeSim forward model showing phantom, primary ray tracing, Monte Carlo scatter, detector physics, sinogram, reconstruction, and dose." />
+  <figcaption><strong>Figure 2.</strong> A simplified DukeSim forward model. The scanner is not one function. It is a sequence of physical and computational steps.</figcaption>
+</figure>
+
+A useful way to think about it is
+
+$$
+\text{anatomy}
+\rightarrow
+\text{x-ray transport}
+\rightarrow
+\text{detector signal}
+\rightarrow
+\text{projection data}
+\rightarrow
+\text{reconstruction}.
+$$
+
+Each arrow can add bias, noise, blur, or nonlinearity.
+
+That is why “the simulated image looks realistic” is not enough. A VIT needs the simulator to be realistic **for the task and the operating range of the trial**.
+
+## 4. The superpower: paired counterfactuals
+
+Back to the nodule question.
+
+For a real person, protocol A and protocol B are two scans separated by time. Anatomy, inspiration, motion, contrast timing, and the noise realization can all change.
+
+For a virtual patient, we can clone them:
+
+$$
+X_j^{(A)} = X_j^{(B)} = X_j.
+$$
+
+Only the protocol changes.
+
+<figure class="figure-block">
+  <img src="/posts/DukeSim-VIT/fig3_counterfactual_pairs.svg" alt="The same virtual patient is imaged under three protocols, producing paired counterfactual measurements." />
+  <figcaption><strong>Figure 3.</strong> Counterfactual pairing. The same virtual anatomy goes through more than one imaging condition, so protocol differences are not mixed up with anatomical differences.</figcaption>
+</figure>
+
+For a paired endpoint, we can compute
+
+$$
+\Delta_j
+=
+Y_{j,B} - Y_{j,A}.
+$$
+
+A lot of the anatomy-specific baseline cancels. What is left is much closer to the effect you meant to study.
+
+That is the heart of a VIT.
+
+It also suggests a design rule:
+
+> **Reuse the same virtual patients across protocol arms whenever the question allows a paired comparison.**
+
+## 5. Separate factors from nuisance variables
+
+Imagine a graduate project testing three acquisition choices:
+
+- dose: low / medium / reference
+- reconstructed slice thickness: thin / standard / thick
+- reconstruction kernel: smooth / medium / sharp
+
+That is already a $3\times3\times3=27$-condition factorial design *per virtual patient*.
+
+<figure class="figure-block">
+  <img src="/posts/DukeSim-VIT/fig4_factorial_design.svg" alt="Factorial virtual imaging trial design varying dose, slice thickness, and reconstruction kernel across the same virtual cohort." />
+  <figcaption><strong>Figure 4.</strong> A factorial VIT. The experimental factors make a parameter space. Anatomy and repeated noise realizations give you the population and the randomness.</figcaption>
+</figure>
+
+The experiment gets easier to think about if every variable has a job.
+
+| Role | Example | What to do |
+|---|---|---|
+| **Experimental factor** | dose, kernel, slice thickness | vary on purpose |
+| **Population variable** | body habitus, sex, disease severity | sample across patients |
+| **Stochastic variable** | quantum noise realization | repeat with controlled seeds |
+| **Nuisance variable** | FOV, positioning | hold still, or model it explicitly |
+| **Endpoint** | detection AUC, bias, RMSE | pick it before you simulate |
+
+A giant parameter sweep is not automatically a good VIT. If ten things change at once and you report one image metric, the simulator made data. The trial may still not have an answer.
+
+## 6. Repeat the noise, not just the patient
+
+A virtual patient is deterministic. A CT acquisition is not.
+
+If you simulate a protocol only once, a lucky noise realization can look like a protocol win.
+
+For patient $j$, protocol $p$, and noise realization $r$,
+
+$$
+Y_{jpr}
+=
+\mu
++
+\alpha_p
++
+b_j
++
+\epsilon_{jpr},
+$$
+
+where
+
+- $\alpha_p$ is the protocol effect
+- $b_j$ captures how hard that patient is
+- $\epsilon_{jpr}$ is the stochastic leftover
+
+That is why repeated noise realizations still help even when the anatomy is identical.
+
+For a teaching experiment, five repeats per condition is often enough to make the idea visible. For a research study, the repeat count should follow from the endpoint variance and how precise you need to be.
+
+## 7. Image quality is not the endpoint
+
+Noise, NPS, MTF/TTF, CT number accuracy, and dose are essential for **checking and characterizing the imaging chain**.
+
+They do not automatically answer a clinical task.
+
+A sharper kernel can improve spatial resolution and also raise the noise. Whether that tradeoff is good depends on the task:
+
+$$
+\text{image quality} \neq \text{task performance}.
+$$
+
+For a small lesion, the endpoint might be detectability. For airways, it may be wall-thickness or wall-area error. For emphysema, it may be bias in a density biomarker.
+
+A useful ladder is:
+
+1. **Physics validation** - does the simulator reproduce scanner behavior?
+2. **Image-quality validation** - are noise, resolution, contrast, and dose realistic?
+3. **Task validation** - does the simulated system behave like the task or observer?
+4. **Trial inference** - what happens when we change the experimental factor?
+
+The first three support the fourth.
+
+## 8. Validation is local
+
+The original DukeSim papers compared simulated and experimental CT using contrast, noise magnitude, noise texture, and spatial resolution, and they looked close for the scanner and conditions they tested.[1] Later work turned DukeSim into an end-to-end setup with scanner configs, reconstruction, and a graphical interface.[4]
+
+The important phrase is **for the tested conditions**.
+
+Validation does not automatically carry from
+
+- one scanner to another
+- one detector type to another
+- routine dose to ultra-low dose
+- FBP to a nonlinear reconstruction
+- a uniform phantom to a subtle low-contrast task
+
+Think of validation as a domain:
+
+$$
+\mathcal{V}
+=
+\{
+\text{scanner},
+\text{protocol range},
+\text{object class},
+\text{metrics},
+\text{task}
+\}.
+$$
+
+A VIT should stay inside that domain - or say clearly why it is stepping outside.
+
+## 9. A small VIT, written before it is run
+
+Below is a **conceptual trial manifest**. It is not official DukeSim syntax.
+
+```yaml
+question:
+  does: "protocol B improve small-nodule detectability over protocol A?"
+
+population:
+  phantoms: 30
+  pathology:
+    lesion_diameter_mm: [4, 6, 8]
+    lesion_contrast: "fixed within each paired comparison"
+
+protocols:
+  A:
+    dose_level: "low"
+    kernel: "medium"
+    slice_thickness_mm: 1.0
+  B:
+    dose_level: "low"
+    kernel: "sharp"
+    slice_thickness_mm: 1.0
+
+stochastic_repeats:
+  noise_realizations_per_phantom_protocol: 5
+
+endpoint:
+  primary: "detectability"
+  secondary: ["noise", "resolution", "dose"]
+
+analysis:
+  design: "paired by virtual patient"
+  report: ["mean paired difference", "confidence interval", "effect vs lesion size"]
+```
+
+And the wrapper logic looks like:
+
+```python
+for patient in virtual_population:
+    for protocol in protocols:
+        for seed in noise_seeds:
+            projections = dukesim(patient, protocol, seed)
+            image = reconstruct(projections, protocol)
+            score = reader(image)
+            save(patient, protocol, seed, score)
+
+analyze_paired_protocol_effects()
+```
+
+The important part is not the loop.
+
+The important part is that the loop encodes the experimental design.
+
+## 10. What a VIT can answer - and what it cannot
+
+A well-designed VIT can ask counterfactual questions that are very hard to isolate in clinic:
+
+- What if the **same anatomy** were scanned at a different dose?
+- What if the **same lesion** were reconstructed with a different kernel?
+- What if a rare disease presentation were repeated across a controlled population?
+- Which imaging parameter moves a quantitative biomarker the most?
+- Does an AI model fail because of anatomy, disease, scanner physics, reconstruction, or noise?
+
+A VIT is still a model-based experiment.
+
+If the virtual population is unrealistic, the trial population is unrealistic.
+
+If the scanner model is wrong, the image formation is wrong.
+
+If the reader is not a fair stand-in for the task, the endpoint is wrong.
+
+Simulation removes some uncertainties by swapping them for assumptions. The scientific job is to make those assumptions explicit, checked, and matched to the question.
+
+## 11. A graduate-level exercise
+
+Design a VIT for one of these:
+
+1. Does reducing dose change a quantitative lung biomarker?
+2. Does thinner reconstruction improve small-airway measurement accuracy?
+3. Does photon-counting CT improve a task compared with an energy-integrating detector?
+4. Does a reconstruction change improve human or model-observer detectability?
+
+Before running anything, write one page with:
+
+- the clinical or technical question
+- the virtual patient population
+- the known ground truth
+- the experimental factor(s)
+- the nuisance variables
+- how many stochastic repeats
+- the primary endpoint
+- the validation evidence you need
+- the statistical comparison
+
+If those nine items hang together, the simulation is usually the easy part.
+
+---
+
+## References
+
+1. Abadi E, Harrawood B, Sharma S, Kapadia A, Segars WP, Samei E. **DukeSim: A Realistic, Rapid, and Scanner-Specific Simulation Framework in Computed Tomography.** *IEEE Transactions on Medical Imaging.* 2019;38(6):1457–1465. https://doi.org/10.1109/TMI.2018.2886530
+
+2. Duke Center for Virtual Imaging Trials. **DukeSim v1.2.** https://cvit.duke.edu/resource/dukesim-v1-2/
+
+3. Duke Center for Virtual Imaging Trials. **XCAT 3.0 Personalized Phantom Library.** https://cvit.duke.edu/resource/xcat-3-0-personalized-phantom-library/
+
+4. Kavuri A, Fryling M, Felice N, et al. **An end-to-end CT simulation framework with graphical user interface and sample scanner models.** *Medical Physics.* 2025;52(10):e70066. https://doi.org/10.1002/mp.70066

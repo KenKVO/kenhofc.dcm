@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+<rect width="1200" height="520" fill="white"/>
+
+<style>
+  text { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #111; }
+  .title { font-size: 28px; font-weight: 700; }
+  .label { font-size: 20px; font-weight: 650; }
+  .small { font-size: 16px; }
+  .tiny { font-size: 14px; }
+  .box { fill: #fff; stroke: #111; stroke-width: 2; rx: 18; }
+  .soft { fill: #f3f3f3; stroke: #111; stroke-width: 2; rx: 18; }
+  .light { fill: #fafafa; stroke: #777; stroke-width: 1.5; rx: 14; }
+  .arrow { stroke: #111; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+  .dash { stroke: #777; stroke-width: 2; fill: none; stroke-dasharray: 8 8; }
+</style>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111"/>
+  </marker>
+</defs>
+
+<text x="60" y="60" class="title">A virtual imaging trial is a chain of models</text>
+
+<rect x="60" y="150" width="185" height="110" class="soft"/>
+<text x="152" y="195" text-anchor="middle" class="label">Virtual patient</text>
+<text x="152" y="225" text-anchor="middle" class="small">anatomy + truth</text>
+
+<rect x="285" y="150" width="180" height="110" class="box"/>
+<text x="375" y="195" text-anchor="middle" class="label">DukeSim</text>
+<text x="375" y="225" text-anchor="middle" class="small">image formation</text>
+
+<rect x="505" y="150" width="180" height="110" class="box"/>
+<text x="595" y="195" text-anchor="middle" class="label">Reconstruction</text>
+<text x="595" y="225" text-anchor="middle" class="small">kernel / slice / FOV</text>
+
+<rect x="725" y="150" width="180" height="110" class="box"/>
+<text x="815" y="195" text-anchor="middle" class="label">Reader</text>
+<text x="815" y="225" text-anchor="middle" class="small">human / AI / observer</text>
+
+<rect x="945" y="150" width="195" height="110" class="soft"/>
+<text x="1042" y="195" text-anchor="middle" class="label">Endpoint</text>
+<text x="1042" y="225" text-anchor="middle" class="small">detectability / bias</text>
+
+<path d="M245 205 L285 205" class="arrow"/>
+<path d="M465 205 L505 205" class="arrow"/>
+<path d="M685 205 L725 205" class="arrow"/>
+<path d="M905 205 L945 205" class="arrow"/>
+
+<path d="M1042 270 C1042 380 375 390 375 275" class="dash"/>
+<text x="710" y="410" text-anchor="middle" class="small">change the imaging condition; keep the scientific question fixed</text>
+
+<path d="M152 270 L152 350 L930 350" class="dash"/>
+<text x="540" y="336" text-anchor="middle" class="small">ground truth stays attached to the virtual patient</text>
+</svg>

@@ -1,0 +1,25 @@
+---
+import '@/styles/global.css';
+import BaseLayout from 'astro-academic-theme/layouts/BaseLayout.astro';
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+import type { SiteConfig } from 'astro-academic-theme';
+
+interface Props {
+  config: SiteConfig;
+  title?: string;
+  description?: string;
+  showUserInfo?: boolean;
+  currentPath?: string;
+}
+
+const props = Astro.props;
+---
+
+<BaseLayout {...props}>
+  <slot />
+  <slot name="sidebar" slot="sidebar" />
+  <slot name="mobile-sidebar" slot="mobile-sidebar" />
+  <Analytics />
+  <SpeedInsights />
+</BaseLayout>

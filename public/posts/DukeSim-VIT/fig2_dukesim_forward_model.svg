@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640">
+<rect width="1200" height="640" fill="white"/>
+
+<style>
+  text { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; fill: #111; }
+  .title { font-size: 28px; font-weight: 700; }
+  .label { font-size: 20px; font-weight: 650; }
+  .small { font-size: 16px; }
+  .tiny { font-size: 14px; }
+  .box { fill: #fff; stroke: #111; stroke-width: 2; rx: 18; }
+  .soft { fill: #f3f3f3; stroke: #111; stroke-width: 2; rx: 18; }
+  .light { fill: #fafafa; stroke: #777; stroke-width: 1.5; rx: 14; }
+  .arrow { stroke: #111; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+  .dash { stroke: #777; stroke-width: 2; fill: none; stroke-dasharray: 8 8; }
+</style>
+<defs>
+  <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,6 L9,3 z" fill="#111"/>
+  </marker>
+</defs>
+
+<text x="60" y="60" class="title">DukeSim as a CT forward model</text>
+
+<rect x="55" y="225" width="180" height="120" class="soft"/>
+<text x="145" y="270" text-anchor="middle" class="label">Voxelized</text>
+<text x="145" y="300" text-anchor="middle" class="label">phantom</text>
+<text x="145" y="330" text-anchor="middle" class="small">+ material map</text>
+
+<rect x="320" y="115" width="210" height="105" class="box"/>
+<text x="425" y="160" text-anchor="middle" class="label">Ray tracing</text>
+<text x="425" y="190" text-anchor="middle" class="small">primary signal</text>
+
+<rect x="320" y="350" width="210" height="105" class="box"/>
+<text x="425" y="395" text-anchor="middle" class="label">Monte Carlo</text>
+<text x="425" y="425" text-anchor="middle" class="small">scatter + dose</text>
+
+<path d="M235 285 C270 285 275 167 320 167" class="arrow"/>
+<path d="M235 285 C270 285 275 402 320 402" class="arrow"/>
+
+<rect x="620" y="225" width="220" height="120" class="soft"/>
+<text x="730" y="265" text-anchor="middle" class="label">Detector model</text>
+<text x="730" y="295" text-anchor="middle" class="small">response • crosstalk</text>
+<text x="730" y="320" text-anchor="middle" class="small">quantum + electronic noise</text>
+
+<path d="M530 167 C575 167 575 260 620 260" class="arrow"/>
+<path d="M530 402 C575 402 575 310 620 310" class="arrow"/>
+
+<rect x="920" y="120" width="210" height="100" class="box"/>
+<text x="1025" y="165" text-anchor="middle" class="label">Sinogram</text>
+<text x="1025" y="195" text-anchor="middle" class="small">projection data</text>
+
+<rect x="920" y="300" width="210" height="100" class="box"/>
+<text x="1025" y="345" text-anchor="middle" class="label">Reconstruction</text>
+<text x="1025" y="375" text-anchor="middle" class="small">image volume</text>
+
+<rect x="920" y="480" width="210" height="90" class="light"/>
+<text x="1025" y="520" text-anchor="middle" class="label">Dose estimate</text>
+<text x="1025" y="548" text-anchor="middle" class="small">Monte Carlo output</text>
+
+<path d="M840 275 C875 275 875 170 920 170" class="arrow"/>
+<path d="M1025 220 L1025 300" class="arrow"/>
+<path d="M530 430 C735 535 820 525 920 525" class="arrow"/>
+
+<text x="610" y="595" text-anchor="middle" class="small">scanner geometry, spectrum, bowtie, focal spot, acquisition protocol and detector response condition the forward model</text>
+</svg>

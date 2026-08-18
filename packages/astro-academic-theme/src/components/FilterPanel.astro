@@ -1,0 +1,166 @@
+---
+interface Props {
+  tags: string[];
+  tagColors: string[];
+  filterId?: string;
+}
+
+const { tags, tagColors, filterId = 'filter-panel' } = Astro.props;
+
+/* Use CSS variable names so colors adapt to light/dark theme */
+const colorNames = [
+  'magenta', 'red', 'volcano', 'orange', 'gold', 'lime',
+  'green', 'cyan', 'blue', 'geekblue', 'purple',
+] as const;
+type ColorName = typeof colorNames[number];
+---
+
+<div class="filter-panel">
+  <span class="filter-label">Filters</span>
+  <div class="filter-content">
+    <span class="tags-label">Tags:</span>
+    {tags.map((tag, i) => {
+      const cname = tagColors[i % tagColors.length] as ColorName;
+      const isValid = colorNames.includes(cname);
+      return (
+        <button
+          class="filter-tag"
+          data-tag={tag}
+          data-color={isValid ? cname : 'blue'}
+          data-filter-id={filterId}
+          style={isValid
+            ? `color:var(--color-tag-${cname}); background:var(--color-tag-${cname}-bg);`
+            : `color:var(--color-tag-blue); background:var(--color-tag-blue-bg);`}
+        >
+          {tag}
+        </button>
+      );
+    })}
+  </div>
+</div>
+
+<style>
+  .filter-panel {
+    position: relative;
+    border: 1px solid var(--color-border-primary);
+    border-radius: var(--radius-base);
+    margin-bottom: 1.5rem;
+  }
+
+  .filter-label {
+    position: absolute;
+    top: -10px;
+    left: 16px;
+    background: var(--color-bg-card);
+    padding: 0 8px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .filter-content {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 24px 12px;
+  }
+
+  @media (max-width: 480px) {
+    .filter-content {
+      padding: 14px 12px 10px;
+      gap: 5px;
+    }
+  }
+
+  .tags-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+    margin-right: 4px;
+  }
+
+  .filter-tag {
+    font-size: 11px;
+    padding: 1px 6px;
+    line-height: 18px;
+    border-radius: 3px;
+    border: none;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: all .2s;
+    opacity: 0.55;
+  }
+
+  .filter-tag:hover {
+    opacity: 0.85;
+  }
+
+  .filter-tag.active {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  function initFilterPanels() {
+    const buttons = document.querySelectorAll('.filter-tag');
+    const activeTags = new Set<string>();
+
+    // Clone to remove old listeners
+    buttons.forEach((btn) => {
+      const clone = btn.cloneNode(true) as HTMLElement;
+      btn.parentNode?.replaceChild(clone, btn);
+    });
+
+    function toggleFilter(tag: string) {
+      const filterBtn = document.querySelector(`.filter-tag[data-tag="${tag}"]`) as HTMLElement | null;
+      if (!filterBtn) return;
+      const cname = filterBtn.dataset.color || 'blue';
+
+      if (activeTags.has(tag)) {
+        activeTags.delete(tag);
+        filterBtn.classList.remove('active');
+      } else {
+        activeTags.add(tag);
+        filterBtn.classList.add('active');
+      }
+      filterBtn.style.color = `var(--color-tag-${cname})`;
+      filterBtn.style.background = `var(--color-tag-${cname}-bg)`;
+
+      // Filter cards
+      document.querySelectorAll('[data-tags]').forEach((card) => {
+        const cardEl = card as HTMLElement;
+        const cardTags = (cardEl.dataset.tags || '').split(',').map(t => t.trim());
+        if (activeTags.size === 0) {
+          cardEl.style.display = '';
+        } else {
+          cardEl.style.display = [...activeTags].every(t => cardTags.includes(t)) ? '' : 'none';
+        }
+      });
+    }
+
+    document.querySelectorAll('.filter-tag').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const tag = (btn as HTMLElement).dataset.tag;
+        if (tag) toggleFilter(tag);
+      });
+    });
+
+    // Inline tags on cards trigger the same filter
+    document.querySelectorAll('[data-tag-name]').forEach((el) => {
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const tag = (el as HTMLElement).dataset.tagName;
+        if (tag) toggleFilter(tag);
+      });
+    });
+
+    // Auto-activate tag from URL ?tag= param
+    const urlTag = new URLSearchParams(window.location.search).get('tag');
+    if (urlTag) toggleFilter(urlTag);
+  }
+
+  initFilterPanels();
+  document.addEventListener('astro:after-swap', initFilterPanels);
+</script>
