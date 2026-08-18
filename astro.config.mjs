@@ -9,7 +9,7 @@ import { rehypeHeadingIds } from '@astrojs/markdown-remark';
 
 export default defineConfig({
   site: 'https://kenkvo.github.io',
-  base: process.env.GITHUB_ACTIONS ? '/kenho/' : '/',
+  base: process.env.GITHUB_ACTIONS ? '/kenhofc.dcm/' : '/',
   trailingSlash: 'always',
   integrations: [
     mdx(),
