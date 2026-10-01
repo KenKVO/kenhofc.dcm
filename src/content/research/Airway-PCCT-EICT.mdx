@@ -4,7 +4,7 @@ tags: ["CT", "PCCT", "COPD", "VIT"]
 date: 2026-02-02 00:00:00 -0500
 priority: -20260202
 path: "research/Airway-PCCT-EICT"
-excerpt: "Virtual imaging trial of bronchitis airway biomarkers (Pi10, WA%) on photon-counting vs. energy-integrating CT, with clinical validation. Journal of Medical Imaging 2026; SPIE 2023 precursor."
+excerpt: "Photon-counting CT improved Pi10 and WA% accuracy by 26.3% and 64.9% versus energy-integrating CT under optimal protocols, with clinical validation (max generation 8.8 vs. 6.0). Journal of Medical Imaging 2026."
 selected: true
 venue: "Journal of Medical Imaging 2026"
 links:
@@ -27,7 +27,9 @@ authors:
 
 **Abstract (journal).** Accurate airway measurement is critical for bronchitis quantification with computed tomography (CT), yet optimal protocols and the added value of photon-counting CT (PCCT) over energy-integrating CT (EICT) for reducing bias remain unclear. We quantified biomarker accuracy across modalities and protocols and assessed strategies to reduce bias.
 
-A virtual imaging trial with 20 bronchitis anthropomorphic models was scanned using a validated simulator (DukeSim) for two systems (EICT: SOMATOM Flash; PCCT: NAEOTOM Alpha) at 6.3 and 12.6 mGy. Reconstructions varied algorithm, kernel sharpness, slice thickness, and pixel size. Pi10 (square-root wall thickness at 10-mm perimeter) and WA% (wall-area percentage) were compared against ground-truth airway dimensions from 0.1-mm-precision anatomical models prior to CT simulation. External validation used clinical PCCT ($n=22$) and EICT ($n=80$). PCCT was more accurate than EICT for both biomarkers; sharper kernels and larger matrices reduced error for both technologies. Clinical datasets showed the same directional trends.
+A virtual imaging trial with 20 bronchitis anthropomorphic models was scanned using a validated simulator (DukeSim) for two systems (EICT: SOMATOM Flash; PCCT: NAEOTOM Alpha) at 6.3 and 12.6 mGy. Reconstructions varied algorithm, kernel sharpness, slice thickness, and pixel size. Pi10 (square-root wall thickness at 10-mm perimeter) and WA% (wall-area percentage) were compared against ground-truth airway dimensions from 0.1-mm-precision anatomical models prior to CT simulation. External validation used clinical PCCT ($n=22$) and EICT ($n=80$).
+
+Simulated airway dimensions agreed with pathological references ($R = 0.89$–$0.93$). PCCT had lower error than EICT across segmented generations ($p < 0.05$). Under optimal parameters, PCCT improved Pi10 and WA% accuracy by 26.3% and 64.9%. Across the tested protocols, sharper kernels improved Pi10 and WA% by 25.8% and 33.0%, thinner slices by 23.9% and 49.8%, and smaller pixels by 17.0% and 23.1%; higher dose changed accuracy by at most 3.9%. Clinically, PCCT reached a higher maximum airway generation ($8.8 \pm 0.5$ versus $6.0 \pm 1.1$) with lower variability, matching the virtual-trial trend.
 
 **Conference version (SPIE 2023).** The first library of virtual patients with bronchitis was built from COPDGene-informed CT and imaged at 6.3 and 12.6 mGy with DukeSim (Siemens NAEOTOM Alpha vs. SOMATOM Flash). Relative to EICT, PCCT reduced Pi10 and WA% error by 63.1% and 68.2%. Larger matrix, sharper kernel, and thinner slices helped both technologies; dose had little effect on these morphological features. *Ho FC, Sotoudeh-Paima S, Segars WP, Samei E, Abadi E. Proc. SPIE 12463, 124631B.*
 

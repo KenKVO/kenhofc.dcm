@@ -11,7 +11,6 @@ export function getNavItems(config: SiteConfig): NavItem[] {
     { label: 'About', href: '/', exact: true },
     { label: 'Experience', href: '/experience/', exact: false },
     { label: 'Research', href: `/${config.pages.research}/`, exact: false },
-    { label: 'Posts', href: `/${config.pages.posts}/`, exact: false },
   ];
 }
 

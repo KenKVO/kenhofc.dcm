@@ -34,6 +34,9 @@ const navItems = getNavItems(config);
         </a>
       );
     })}
+    {import.meta.env.DEV && (
+      <a href={withBase('/admin/')} class="mast-link">Studio</a>
+    )}
   </nav>
 
   <div class="mast-tools">

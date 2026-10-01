@@ -6,6 +6,7 @@ import tailwindcss from '@tailwindcss/vite';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import { rehypeHeadingIds } from '@astrojs/markdown-remark';
+import { adminCms } from './admin/plugin.mjs';
 
 export default defineConfig({
   site: 'https://kenkvo.github.io',
@@ -16,7 +17,7 @@ export default defineConfig({
     sitemap(),
   ],
   vite: {
-    plugins: [tailwindcss()],
+    plugins: [tailwindcss(), adminCms()],
   },
   markdown: {
     remarkPlugins: [remarkMath],

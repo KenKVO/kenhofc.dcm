@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Content Studio</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" />
+  <style>
+    :root {
+      --navy: #012169; --accent: #9b3d1a; --bg: #f3f6fb; --card: #ffffff;
+      --line: #d4dde8; --text: #1c1915; --muted: #7a7168; --ok: #389e0d;
+      --serif: "Source Serif 4", Georgia, serif; --sans: "Source Sans 3", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; }
+    body { font: 15px/1.55 var(--sans); color: var(--text); background: var(--bg); }
+    #app { display: grid; grid-template-columns: 232px 1fr; min-height: 100vh; }
+    aside {
+      background: var(--navy); color: #e8dcc8; padding: 1.4rem 1rem 2rem;
+      position: sticky; top: 0; height: 100vh;
+    }
+    aside h1 { font-family: var(--serif); font-size: 1.35rem; margin: 0; color: #fff; letter-spacing: -0.02em; }
+    aside .sub { margin: 0.2rem 0 1.4rem; font-size: 0.72rem; letter-spacing: 0.06em; text-transform: uppercase; opacity: 0.65; }
+    aside nav a {
+      display: flex; align-items: center; gap: 0.55rem; color: #e8dcc8; text-decoration: none;
+      padding: 0.52rem 0.7rem; border-radius: 4px; margin-bottom: 2px; font-weight: 500;
+    }
+    aside nav a:hover, aside nav a.active { background: rgba(255,255,255,0.12); color: #fff; }
+    aside .foot { position: absolute; bottom: 1.25rem; left: 1rem; right: 1rem; }
+    aside .foot a { color: #e8dcc8; text-decoration: none; font-size: 0.85rem; opacity: 0.8; }
+    aside .foot a:hover { opacity: 1; color: #fff; }
+    main { padding: 1.6rem 2rem 6rem; max-width: 920px; }
+    .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 1.1rem; }
+    h2 { font-family: var(--serif); font-size: 1.7rem; margin: 0 0 0.25rem; color: var(--navy); }
+    .hint { color: var(--muted); font-size: 0.9rem; margin: 0; }
+    .card { background: var(--card); border: 1px solid var(--line); padding: 1rem 1.1rem 1.15rem; margin-bottom: 0.9rem; }
+    .card h3 { margin: 0 0 0.65rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+    label { display: block; font-size: 0.75rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); margin: 0.7rem 0 0.28rem; }
+    input:not([type=checkbox]), textarea, select {
+      width: 100%; padding: 0.52rem 0.7rem; border: 1px solid var(--line); background: #fff;
+      color: var(--text); border-radius: 3px; font: inherit;
+    }
+    input:focus, textarea:focus, select:focus { outline: 2px solid color-mix(in srgb, var(--navy) 30%, transparent); border-color: var(--navy); }
+    textarea { min-height: 6.5rem; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 0.86rem; line-height: 1.5; resize: vertical; }
+    textarea.body { min-height: 24rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; }
+    .actions { display: flex; gap: 0.45rem; flex-wrap: wrap; align-items: center; margin-top: 0.75rem; }
+    button, .btn {
+      border: 0; background: var(--navy); color: #fff; padding: 0.48rem 0.95rem; border-radius: 3px;
+      cursor: pointer; font: 500 0.92rem var(--sans); text-decoration: none; display: inline-flex; align-items: center; gap: 0.35rem;
+    }
+    button.secondary, .btn.secondary { background: #fff; color: var(--navy); border: 1px solid var(--line); }
+    button.ghost { background: transparent; color: var(--muted); padding: 0.3rem 0.5rem; }
+    button.danger { background: var(--accent); }
+    button:disabled { opacity: 0.5; cursor: default; }
+    .search { margin: 0 0 0.75rem; }
+    .list { border: 1px solid var(--line); background: var(--card); }
+    .list a.rowitem, .list .rowitem {
+      display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center;
+      padding: 0.85rem 1rem; border-bottom: 1px solid var(--line); text-decoration: none; color: inherit;
+    }
+    .list a.rowitem:hover { background: #eef3f9; }
+    .list .title { font-weight: 600; }
+    .list .snippet { color: var(--muted); font-size: 0.88rem; margin: 0.15rem 0 0; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .list .meta { color: var(--muted); font-size: 0.82rem; white-space: nowrap; display: flex; gap: 0.35rem; }
+    .badge { font-size: 0.7rem; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent); padding: 0.05rem 0.4rem; border-radius: 3px; margin-left: 0.4rem; }
+    .pair { display: grid; grid-template-columns: 1fr 1fr auto; gap: 0.45rem; align-items: end; margin-bottom: 0.45rem; }
+    .check { display: flex; align-items: center; gap: 0.5rem; margin: 0.85rem 0 0.2rem; text-transform: none; letter-spacing: 0; font-size: 0.95rem; color: var(--text); font-weight: 500; }
+    .para { position: relative; }
+    .para .ghost { position: absolute; right: 0; top: 0; }
+    .bar {
+      position: fixed; right: 0; bottom: 0; left: 232px; background: rgba(255,255,255,0.92);
+      border-top: 1px solid var(--line); padding: 0.7rem 2rem; display: flex; justify-content: space-between; align-items: center;
+      backdrop-filter: blur(8px);
+    }
+    .toast {
+      position: fixed; top: 1rem; right: 1.25rem; background: var(--navy); color: #fff;
+      padding: 0.65rem 0.95rem; border-radius: 4px; box-shadow: 0 8px 24px rgba(1,33,105,0.18);
+      opacity: 0; transform: translateY(-6px); pointer-events: none; transition: 0.2s ease;
+    }
+    .toast.show { opacity: 1; transform: none; }
+    .toast.err { background: var(--accent); }
+    .empty { padding: 1.4rem 1rem; color: var(--muted); text-align: center; }
+    kbd { font: 0.78rem ui-monospace, Menlo, Consolas, monospace; border: 1px solid var(--line); padding: 0.05rem 0.35rem; border-radius: 3px; }
+    @media (max-width: 800px) {
+      #app { grid-template-columns: 1fr; }
+      aside, .bar { position: static; height: auto; left: 0; }
+      aside .foot { position: static; margin-top: 1rem; }
+      .row, .pair { grid-template-columns: 1fr; }
+      main { padding: 1.2rem 1rem 5rem; }
+    }
+  </style>
+</head>
+<body>
+<div id="app"></div>
+<div id="toast" class="toast"></div>
+<script>
+const $ = (sel, el = document) => el.querySelector(sel);
+const $$ = (sel, el = document) => [...el.querySelectorAll(sel)];
+const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const api = (path, opts) => fetch(path, opts).then(async r => {
+  const data = await r.json().catch(() => ({}));
+  if (!r.ok) throw new Error(data.error || r.statusText);
+  return data;
+});
+const route = () => {
+  const p = (location.hash.replace(/^#\/?/, '') || 'home').split('/');
+  return { view: p[0] || 'home', id: decodeURIComponent(p.slice(1).join('/')) };
+};
+
+let content = null, papers = [], dirty = false, saveHandler = null;
+
+function toast(msg, kind = '') {
+  const el = $('#toast');
+  el.textContent = msg;
+  el.className = 'toast show' + (kind === 'err' ? ' err' : '');
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.remove('show'), 2400);
+}
+function go(hash) { location.hash = hash; }
+function markDirty() { dirty = true; const b = $('#save-btn'); if (b) b.disabled = false; }
+function markClean() { dirty = false; const b = $('#save-btn'); if (b) b.disabled = true; }
+async function loadContent() { content = await api('/admin/api/content'); }
+async function loadPapers() { papers = await api('/admin/api/list/research'); }
+
+function shell(title, hint, inner, saveLabel) {
+  const { view } = route();
+  const nav = [['home','Home'],['news','News'],['publications','Publications'],['posts','Posts']];
+  return `<aside>
+      <h1>Studio</h1>
+      <p class="sub">Local · not published</p>
+      <nav>${nav.map(([k,l]) => `<a href="#/${k}" class="${view===k?'active':''}">${l}</a>`).join('')}</nav>
+      <div class="foot"><a href="/">← Open the site</a></div>
+    </aside>
+    <main>
+      <div class="head">
+        <div><h2>${title}</h2><p class="hint">${hint}</p></div>
+      </div>
+      ${inner}
+    </main>
+    <div class="bar">
+      <span class="hint">Saves files on this computer. Commit later to publish. <kbd>Ctrl</kbd>+<kbd>S</kbd></span>
+      ${saveLabel ? `<button id="save-btn" disabled>${saveLabel}</button>` : '<span></span>'}
+    </div>`;
+}
+
+function paraBlock(name, values, hint) {
+  return `<div class="card"><h3>${name}</h3><p class="hint">${hint}</p>
+    ${(values || []).map((v,i) => `<div class="para">
+      <label>${name} ${i+1}</label>
+      <button type="button" class="ghost" data-rm="${name}" data-i="${i}">Remove</button>
+      <textarea name="${name}-${i}">${esc(v)}</textarea>
+    </div>`).join('')}
+    <div class="actions"><button type="button" class="secondary" data-add="${name}">Add paragraph</button></div>
+  </div>`;
+}
+
+function paperOptions(href) {
+  const opts = papers.map(p => {
+    const h = `./research/${p.id}/`;
+    return `<option value="${esc(h)}" ${h===href?'selected':''}>${esc(p.title)}</option>`;
+  }).join('');
+  const extra = href && !papers.some(p => `./research/${p.id}/` === href)
+    ? `<option value="${esc(href)}" selected>${esc(href)}</option>` : '';
+  return `<option value="">Choose a paper page…</option>${extra}${opts}`;
+}
+
+function paperRow(p = {}) {
+  return `<div class="pair" data-paper>
+    <div><label>Button label</label><input type="text" data-k="title" value="${esc(p.title||'')}" placeholder="DOI, PDF…" /></div>
+    <div><label>Links to</label><select data-k="href">${paperOptions(p.href||'')}</select></div>
+    <button type="button" class="secondary" data-rm-row>Remove</button>
+  </div>`;
+}
+
+function pairRows(kind, list, a, b) {
+  const rows = (list && list.length) ? list : [{[a]:'',[b]:''}];
+  return rows.map(item => `<div class="pair" data-${kind}>
+    <div><label>${a === 'name' && kind==='author' ? 'Author name' : kind==='link' ? 'Link name' : 'Name'}</label>
+      <input type="text" data-k="${a}" value="${esc(item[a]||'')}" /></div>
+    <div><label>${b === 'url' ? 'URL (optional)' : 'URL'}</label>
+      <input type="text" data-k="${b}" value="${esc(item[b]||'')}" /></div>
+    <button type="button" class="secondary" data-rm-row>Remove</button>
+  </div>`).join('');
+}
+
+function renderHome() {
+  const c = content;
+  return shell('Homepage', 'About, research intro, and the misc note on the front page.', `
+    <form id="edit-form">
+      <div class="card">
+        <h3>Profile</h3>
+        <div class="row">
+          <div><label>Quote</label><input type="text" name="quote" value="${esc(c.quote)}" /></div>
+          <div><label>Location</label><input type="text" name="location" value="${esc(c.location)}" /></div>
+        </div>
+        <label>Roles</label>
+        <input type="text" name="professions" value="${esc((c.professions||[]).join(', '))}" placeholder="Ph.D. Candidate, Medical Imaging" />
+      </div>
+      ${paraBlock('Intro', c.introduction, 'Markdown is fine: *italic* names, [link](url), **bold**.')}
+      ${paraBlock('Research', c.researchIntro, 'Numbered lists work. *italic* keywords get a highlight on the site.')}
+      <div class="card">
+        <h3>Misc</h3>
+        <textarea name="misc">${esc(c.misc)}</textarea>
+      </div>
+    </form>`, 'Save homepage');
+}
+
+function renderNews() {
+  const { id } = route();
+  if (id === 'new' || id !== '') {
+    const i = id === 'new' ? -1 : Number(id);
+    const item = i < 0 ? { date:'', text:'', papers:[] } : structuredClone(content.news[i] || { date:'', text:'', papers:[] });
+    item.papers = item.papers || [];
+    return shell(i < 0 ? 'New news item' : 'Edit news', 'Use a short date like Feb. 2026. Text can include markdown and emoji.', `
+      <form id="edit-form" data-index="${i}">
+        <div class="card">
+          <label>Date shown</label>
+          <input type="text" name="date" value="${esc(item.date)}" placeholder="Feb. 2026" />
+          <label>Announcement</label>
+          <textarea name="text">${esc(item.text)}</textarea>
+          <label>Paper buttons</label>
+          <div id="paper-rows">${item.papers.map(paperRow).join('')}</div>
+          <div class="actions"><button type="button" class="secondary" id="add-paper">Add paper button</button></div>
+        </div>
+        <div class="actions"><a class="btn secondary" href="#/news">Back to news</a></div>
+      </form>`, 'Save news item');
+  }
+  return shell('News', 'Newest items belong at the top of the homepage ticker.', `
+    <div class="actions" style="margin:0 0 0.8rem"><a class="btn" href="#/news/new">Add news</a></div>
+    <div class="list">${content.news.map((n,i) => `
+      <div class="rowitem">
+        <a href="#/news/${i}" style="text-decoration:none;color:inherit;min-width:0">
+          <div class="title">${esc(n.date)}</div>
+          <div class="snippet">${esc(n.text)}</div>
+        </a>
+        <span class="meta">
+          <button class="secondary" data-move="${i}" data-dir="-1">Up</button>
+          <button class="secondary" data-move="${i}" data-dir="1">Down</button>
+          <button class="danger" data-del-news="${i}">Delete</button>
+        </span>
+      </div>`).join('') || '<div class="empty">No news yet.</div>'}</div>`);
+}
+
+function renderList(kind, title, hint) {
+  return shell(title, hint, `
+    <div class="actions" style="margin:0 0 0.8rem">
+      <button id="new-entry" data-kind="${kind}">New ${kind === 'research' ? 'publication' : 'post'}</button>
+    </div>
+    <input class="search" id="filter" type="search" placeholder="Filter by title…" />
+    <div class="list" id="entry-list"><div class="empty">Loading…</div></div>`);
+}
+
+function renderEntry(kind, id, entry) {
+  const d = entry.data || {};
+  const isPub = kind === 'research';
+  const dateVal = String(d.date || '').slice(0, 10);
+  return shell(id === 'new' ? (isPub ? 'New publication' : 'New post') : esc(d.title || id),
+    isPub ? 'Card fields plus the page body. Math in the body is kept as you type it.' : 'Post fields plus the page body. MDX, figures, and math are kept as-is.', `
+    <form id="edit-form" data-kind="${kind}" data-id="${esc(id)}">
+      <input type="hidden" name="originalDate" value="${esc(d.date || '')}" />
+      <div class="card">
+        <h3>Details</h3>
+        <label>Title</label><input type="text" name="title" value="${esc(d.title||'')}" />
+        <div class="row">
+          <div><label>Date</label><input type="date" name="date" value="${esc(dateVal)}" /></div>
+          <div><label>Filename slug</label><input type="text" name="slug" value="${esc(id==='new'?'':id)}" ${id==='new'?'':'readonly'} placeholder="COPD-Phenotypes" /></div>
+        </div>
+        <label>Tags</label><input type="text" name="tags" value="${esc((d.tags||[]).join(', '))}" placeholder="COPD, CT, VIT" />
+        <label>Excerpt</label><textarea name="excerpt">${esc(d.excerpt||'')}</textarea>
+        ${isPub ? `
+          <label>Venue</label><input type="text" name="venue" value="${esc(d.venue||'')}" />
+          <label>Cover image path</label><input type="text" name="cover" value="${esc(d.cover||'')}" placeholder="/research/My-Paper/cover.png" />
+          <label class="check"><input type="checkbox" name="selected" ${d.selected?'checked':''}/> Show in Selected Research on the homepage</label>
+        ` : `<label>Cover image path</label><input type="text" name="cover" value="${esc(d.cover||'')}" placeholder="/posts/My-Post/cover.svg" />`}
+      </div>
+      ${isPub ? `
+      <div class="card">
+        <h3>Authors</h3>
+        <p class="hint">Wrap your name in **bold**. Optional URL, e.g. /</p>
+        <div id="authors">${pairRows('author', d.authors, 'name', 'url')}</div>
+        <div class="actions"><button type="button" class="secondary" data-add="author">Add author</button></div>
+      </div>
+      <div class="card">
+        <h3>Links</h3>
+        <div id="links">${pairRows('link', d.links, 'name', 'url')}</div>
+        <div class="actions"><button type="button" class="secondary" data-add="link">Add link</button></div>
+      </div>` : ''}
+      <div class="card">
+        <h3>Page body</h3>
+        <textarea class="body" name="body">${esc(entry.body || '')}</textarea>
+      </div>
+      <div class="actions">
+        <a class="btn secondary" href="#/${isPub ? 'publications' : 'posts'}">Back</a>
+        ${id !== 'new' ? `<button type="button" class="danger" id="delete-entry">Delete page</button>` : ''}
+      </div>
+    </form>`, 'Save');
+}
+
+function collectParas(form, name) {
+  return $$(`textarea[name^="${name}-"]`, form).map(t => t.value).filter(v => v.trim());
+}
+function collectPairs(root, sel) {
+  return $$(sel, root).map(row => {
+    const o = {};
+    $$('[data-k]', row).forEach(el => { if (el.value.trim()) o[el.dataset.k] = el.value.trim(); });
+    return o;
+  }).filter(o => o.name || o.title);
+}
+function fmtDate(iso, original) {
+  if (!iso) return original || '';
+  if (original && String(original).slice(0, 10) === iso) return original;
+  return `${iso} 00:00:00 -0400`;
+}
+function slugify(title) {
+  return title.trim().replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '') || '';
+}
+
+function snapshotHome(form) {
+  if (!form || !content) return;
+  content.quote = form.quote.value;
+  content.location = form.location.value;
+  content.professions = form.professions.value.split(',').map(s => s.trim()).filter(Boolean);
+  content.introduction = collectParas(form, 'Intro');
+  content.researchIntro = collectParas(form, 'Research');
+  content.misc = form.misc.value;
+}
+
+async function saveContent() {
+  await api('/admin/api/content', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(content) });
+  markClean();
+  toast('Saved');
+}
+
+async function render() {
+  const { view, id } = route();
+  saveHandler = null;
+  if (!content) await loadContent();
+  if ((view === 'news' || view === 'publications') && !papers.length) await loadPapers();
+
+  if (view === 'home') $('#app').innerHTML = renderHome();
+  else if (view === 'news') $('#app').innerHTML = renderNews();
+  else if (view === 'publications' || view === 'posts') {
+    const kind = view === 'publications' ? 'research' : 'posts';
+    if (id) {
+      $('#app').innerHTML = shell('Loading', '', '<p class="hint">Loading…</p>');
+      try {
+        const entry = id === 'new'
+          ? { data: { tags: [], authors: [], links: [] }, body: '' }
+          : await api(`/admin/api/entry/${kind}/${encodeURIComponent(id)}`);
+        $('#app').innerHTML = renderEntry(kind, id, entry);
+      } catch (e) {
+        $('#app').innerHTML = shell('Error', '', `<p>${esc(e.message)}</p>`);
+      }
+    } else {
+      $('#app').innerHTML = renderList(kind, view === 'publications' ? 'Publications' : 'Posts',
+        view === 'publications' ? 'Papers and abstracts shown on the Research page.' : 'Notes shown on the Posts page.');
+      const items = await api(`/admin/api/list/${kind}`);
+      const paint = (q = '') => {
+        const n = q.trim().toLowerCase();
+        const shown = items.filter(it => !n || it.title.toLowerCase().includes(n) || it.id.toLowerCase().includes(n));
+        $('#entry-list').innerHTML = shown.map(it => `<a class="rowitem" href="#/${view}/${encodeURIComponent(it.id)}">
+          <span><span class="title">${esc(it.title)}</span>${it.selected ? '<span class="badge">Selected</span>' : ''}</span>
+          <span class="meta">${esc(String(it.date).slice(0,10))}${it.venue ? ' · ' + esc(it.venue) : ''}</span>
+        </a>`).join('') || '<div class="empty">Nothing matches.</div>';
+      };
+      paint();
+      $('#filter')?.addEventListener('input', (e) => paint(e.target.value));
+    }
+  } else $('#app').innerHTML = renderHome();
+  bind();
+  markClean();
+}
+
+function bind() {
+  const form = $('#edit-form');
+  form?.addEventListener('input', markDirty);
+  form?.addEventListener('change', markDirty);
+
+  $$('[data-add]').forEach(btn => btn.addEventListener('click', () => {
+    const name = btn.dataset.add;
+    if (name === 'Intro' || name === 'Research') {
+      snapshotHome(form);
+      const arr = name === 'Intro' ? content.introduction : content.researchIntro;
+      arr.push('');
+      render();
+      markDirty();
+    } else if (name === 'author') { $('#authors').insertAdjacentHTML('beforeend', pairRows('author', [{name:'',url:''}], 'name','url')); markDirty(); }
+    else if (name === 'link') { $('#links').insertAdjacentHTML('beforeend', pairRows('link', [{name:'',url:''}], 'name','url')); markDirty(); }
+  }));
+  $$('[data-rm]').forEach(btn => btn.addEventListener('click', () => {
+    snapshotHome(form);
+    const arr = btn.dataset.rm === 'Intro' ? content.introduction : content.researchIntro;
+    arr.splice(Number(btn.dataset.i), 1);
+    render();
+    markDirty();
+  }));
+  $$('[data-rm-row]').forEach(b => b.addEventListener('click', () => { b.parentElement.remove(); markDirty(); }));
+  $('#add-paper')?.addEventListener('click', () => { $('#paper-rows').insertAdjacentHTML('beforeend', paperRow()); markDirty(); });
+
+  $$('[data-move]').forEach(b => b.addEventListener('click', async () => {
+    const i = Number(b.dataset.move), j = i + Number(b.dataset.dir);
+    if (j < 0 || j >= content.news.length) return;
+    [content.news[i], content.news[j]] = [content.news[j], content.news[i]];
+    await saveContent();
+    render();
+  }));
+  $$('[data-del-news]').forEach(b => b.addEventListener('click', async () => {
+    if (!confirm('Delete this news item?')) return;
+    content.news.splice(Number(b.dataset.delNews), 1);
+    await saveContent();
+    render();
+  }));
+
+  $('#new-entry')?.addEventListener('click', () => {
+    const kind = $('#new-entry').dataset.kind;
+    go(`#/${kind === 'research' ? 'publications' : 'posts'}/new`);
+  });
+
+  const title = form?.title, slug = form?.slug;
+  if (title && slug && !slug.readOnly) {
+    let auto = !slug.value;
+    slug.addEventListener('input', () => { auto = false; });
+    title.addEventListener('input', () => { if (auto) slug.value = slugify(title.value); });
+  }
+
+  async function doSave() {
+    if (!form) return;
+    if (form.id === 'edit-form' && form.quote) {
+      snapshotHome(form);
+      await saveContent();
+      return;
+    }
+    if (form.dataset.index !== undefined) {
+      const i = Number(form.dataset.index);
+      const item = {
+        date: form.date.value.trim(),
+        text: form.text.value,
+        papers: collectPairs(form, '[data-paper]').map(p => ({ title: p.title, href: p.href })),
+      };
+      if (!item.papers.length) delete item.papers;
+      if (i < 0) content.news.unshift(item); else content.news[i] = item;
+      await saveContent();
+      go('#/news');
+      return;
+    }
+    if (form.dataset.kind) {
+      const kind = form.dataset.kind;
+      let id = form.dataset.id;
+      const date = fmtDate(form.date.value, form.originalDate.value);
+      const slugVal = form.slug.value.trim();
+      if (id === 'new' && !slugVal) { toast('Add a filename slug first', 'err'); return; }
+      const data = {
+        title: form.title.value.trim(),
+        tags: form.tags.value.split(',').map(s => s.trim()).filter(Boolean),
+        date,
+        path: `${kind}/${id === 'new' ? slugVal : id}`,
+        excerpt: form.excerpt.value,
+      };
+      if (form.cover?.value.trim()) data.cover = form.cover.value.trim();
+      if (kind === 'research') {
+        data.venue = form.venue.value;
+        data.selected = form.selected.checked;
+        data.priority = date ? -Number(String(date).slice(0,10).replace(/-/g,'')) : undefined;
+        data.authors = collectPairs(form, '[data-author]');
+        data.links = collectPairs(form, '[data-link]');
+      }
+      try {
+        if (id === 'new') {
+          await api(`/admin/api/entry/${kind}`, {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slug: slugVal, data, body: form.body.value }),
+          });
+          id = slugVal;
+        } else {
+          await api(`/admin/api/entry/${kind}/${encodeURIComponent(id)}`, {
+            method: 'PUT', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ data, body: form.body.value }),
+          });
+        }
+        markClean();
+        toast('Saved — refresh the site tab to see it');
+        go(`#/${kind === 'research' ? 'publications' : 'posts'}/${encodeURIComponent(id)}`);
+      } catch (err) { toast(err.message, 'err'); }
+    }
+  }
+  saveHandler = doSave;
+  $('#save-btn')?.addEventListener('click', () => doSave().catch(err => toast(err.message, 'err')));
+  $('#delete-entry')?.addEventListener('click', async () => {
+    if (!confirm('Delete this page from the site?')) return;
+    await api(`/admin/api/entry/${form.dataset.kind}/${encodeURIComponent(form.dataset.id)}`, { method: 'DELETE' });
+    toast('Deleted');
+    go(`#/${form.dataset.kind === 'research' ? 'publications' : 'posts'}`);
+  });
+}
+
+let lastHash = location.hash || '#/home';
+let ignoreHash = false;
+window.addEventListener('hashchange', () => {
+  if (ignoreHash) { ignoreHash = false; return; }
+  if (dirty && !confirm('Discard unsaved changes?')) {
+    ignoreHash = true;
+    location.hash = lastHash;
+    return;
+  }
+  lastHash = location.hash;
+  render().catch(err => toast(err.message, 'err'));
+});
+window.addEventListener('beforeunload', (e) => { if (dirty) e.preventDefault(); });
+window.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 's') {
+    e.preventDefault();
+    saveHandler?.();
+  }
+});
+render().catch(err => { $('#app').innerHTML = `<main><p>${esc(err.message)}</p></main>`; });
+</script>
+</body>
+</html>

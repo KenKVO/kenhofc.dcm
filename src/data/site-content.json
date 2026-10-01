@@ -1,0 +1,80 @@
+{
+  "quote": "I paint in MATLAB",
+  "location": "Durham, NC",
+  "professions": ["Ph.D. Candidate", "Medical Imaging"],
+  "introduction": [
+    "I'm a Ph.D. candidate in [*Electrical and Computer Engineering*](https://ece.duke.edu/) at [*Duke University*](https://duke.edu/) (expected May 2027), working at the [*Center for Virtual Imaging Trials*](https://cvit.duke.edu/) (CVIT) with [Ehsan Abadi](https://scholars.duke.edu/person/ehsan.abadi), [W. Paul Segars](https://scholars.duke.edu/person/paul.segars), and [Ehsan Samei](https://scholars.duke.edu/person/ehsan.samei).",
+    "Previously, I was a research assistant in the Imaging Physics Laboratory at [*UC Irvine*](https://sites.uci.edu/molloilabimagingphysics/) (2021–2022), where I built a benchtop dual-energy photon-counting breast cone-beam CT system. I received my M.S. in Electrical Engineering from [*UC Irvine*](https://engineering.uci.edu/dept/eecs) (2022) and my B.S. in Electrical Engineering from [*UCLA*](https://www.ee.ucla.edu/) (2019)."
+  ],
+  "researchIntro": [
+    "I work on *photon-counting CT*, *physical and computational phantoms*, *task-based image quality*, and *AI-enabled quantitative imaging*. The through-line is to give pulmonary CT biomarkers a ground truth — digitally, physically, and experimentally — so scanner technology and protocols can be evaluated with known anatomy.",
+    "1. **Anthropomorphic phantoms**: Digital lung models with diseases (bronchitis, mucus-plugging, emphysema) and quantitative evaluation of 3D-printed physical phantoms, including collaborations with Canon Medical and an FDA U01 / [FLUIDDA Inc.](https://www.fluidda.com/) project.\n2. **Virtual imaging trials**: Scanner-specific *DukeSim* simulations of energy-integrating and photon-counting CT for COPD quantification, protocol harmonization, and in silico trials such as Virtual NLST / VLST and XCAT 3.0. A 2026 co-authored workflow engine, *GEMSTONe*, refactored VLST with a 3.5× speedup from the engine alone and combined the FDA VICTRE and OpenVCT pipelines in under five weeks.\n3. **Task-based evaluation**: Comparing dose, spatial-resolution mode, reconstruction, and denoising using image-quality metrics and quantitative CT biomarkers (Pi10, WA%, LAA-950, PRM).",
+    "I have also contributed to [*AAPM Task Group 387*](https://www.aapm.org/org/structure/default.asp?committee_code=TG387) recommendations on computational phantom representation, and I collaborate with industry partners including *Canon Medical* and *GE HealthCare*."
+  ],
+  "misc": "I'm from Hong Kong. I currently live and work in Durham, North Carolina. A licensed enthusiast in scuba-diving and sky-diving.",
+  "news": [
+    {
+      "date": "Aug. 2026",
+      "text": "📝 Co-author paper in *Journal of Imaging Informatics in Medicine*: [*GEMSTONe*](https://doi.org/10.1007/s10278-026-02194-6), a workflow engine for virtual imaging trials. Refactoring the Virtual Lung Screening Trial was 3.5× faster from the engine alone, and FDA VICTRE plus OpenVCT were combined in under five weeks.",
+      "papers": [{ "title": "GEMSTONe", "href": "./research/GEMSTONe/" }]
+    },
+    {
+      "date": "Feb. 2026",
+      "text": "📝 First-author paper in *Journal of Medical Imaging*: photon-counting CT improved Pi10 and WA% accuracy by 26.3% and 64.9% versus energy-integrating CT, and clinically segmented more airway generations (8.8 vs. 6.0).",
+      "papers": [{ "title": "JMI 2026", "href": "./research/Airway-PCCT-EICT/" }]
+    },
+    {
+      "date": "Jan. 2026",
+      "text": "🏆 **Best Graduate Student Poster** at [*Duke Radiology Research Day 2026*](https://radiology.duke.edu/research/research-day/2026-radiology-research-day-archive) for the 3D-printed COPD lung phantom study, mentored by Ehsan Abadi.",
+      "papers": [{ "title": "PCCT Phantom", "href": "./research/PCCT-Lung-Phantom/" }]
+    },
+    {
+      "date": "Dec. 2025",
+      "text": "🎤 Oral presentation at *RSNA 2025*: *Task-Specific Evaluation of Photon-Counting CT Using a 3D-Printed Anthropomorphic Lung Phantom with COPD Pathology* (Physics, S404).",
+      "papers": [{ "title": "RSNA Oral", "href": "./research/PCCT-Lung-Phantom/" }]
+    },
+    {
+      "date": "Dec. 2025",
+      "text": "📌 Poster at *RSNA 2025*: *Quantification Accuracy, Consistency, and Image Quality in Deep-Learning CT Reconstruction Kernels Optimized for Pulmonary Imaging*.",
+      "papers": [{ "title": "DL Reconstruction", "href": "./research/DL-CT-Reconstruction/" }]
+    },
+    {
+      "date": "Nov. 2025",
+      "text": "📝 Co-author paper in *Medical Physics* on unified CT image harmonization across multiple tasks.",
+      "papers": [{ "title": "Harmonization", "href": "./research/CT-Harmonization/" }]
+    },
+    {
+      "date": "Aug. 2025",
+      "text": "💼 Starting as a Technology and Intellectual Property Fellow at the [*Duke Office of Translation & Commercialization*](https://otc.duke.edu/team/ken-ho/)!"
+    },
+    {
+      "date": "Jul. 2025",
+      "text": "📝 Two papers in *Medical Image Analysis*: [XCAT 3.0](https://doi.org/10.1016/j.media.2025.103636) digital twins and the [Virtual Lung Screening Trial](https://doi.org/10.1016/j.media.2025.103576).",
+      "papers": [
+        { "title": "XCAT 3.0", "href": "./research/XCAT-3/" },
+        { "title": "VLST", "href": "./research/VLST/" }
+      ]
+    },
+    {
+      "date": "Apr. 2025",
+      "text": "📝 Papers at *SPIE Medical Imaging 2025* on COPD protocol accuracy and CT harmonization."
+    },
+    {
+      "date": "Feb. 2024",
+      "text": "🎤 Presenting at *Virtual Imaging Trials in Medicine* on small-airway disease quantification and subject-specific airway modeling."
+    },
+    {
+      "date": "Feb. 2024",
+      "text": "🎤 Presenting at *Virtual Imaging Trials in Medicine* on patient-specific airway modeling."
+    },
+    {
+      "date": "Apr. 2023",
+      "text": "📝 First-author SPIE Medical Imaging paper: a virtual imaging trial framework for airway quantifications via CT.",
+      "papers": [{ "title": "SPIE 2023", "href": "./research/Airway-PCCT-EICT/" }]
+    },
+    {
+      "date": "Aug. 2022",
+      "text": "🎓 Started my Ph.D. in ECE at [*Duke*](https://duke.edu/) and joined [*CVIT*](https://cvit.duke.edu/)!"
+    }
+  ]
+}
